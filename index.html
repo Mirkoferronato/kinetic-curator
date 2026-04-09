@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="it" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kinetic Curator | Le Migliori Offerte del Giorno</title>
+  <meta name="description" content="Le migliori offerte del giorno selezionate da Amazon. Risparmia su elettronica, casa, moda, sport e molto altro." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  <script>tailwind.config = { darkMode: 'class' }</script>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    a { text-decoration: none; }
+  </style>
+</head>
+<body class="bg-[#faf8ff] dark:bg-[#0a1a3a] transition-colors duration-300">
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+    const AFFILIATE_TAG = "mirkoferron07-21";
+    const makeAmazonLink = (asin) => `https://www.amazon.it/dp/${asin}?tag=${AFFILIATE_TAG}&linkCode=ogi&th=1&psc=1`;
+    const CATEGORIES = [
+      { id: "all", label: "Tutto", icon: "star" },
+      { id: "electronics", label: "Electronics", icon: "devices" },
+      { id: "home", label: "Casa", icon: "home" },
+      { id: "fashion", label: "Moda", icon: "apparel" },
+      { id: "sport", label: "Sport", icon: "sports_soccer" },
+      { id: "beauty", label: "Beauty", icon: "content_cut" },
+      { id: "auto", label: "Auto", icon: "directions_car" },
+      { id: "giardino", label: "Giardino", icon: "yard" },
+      { id: "bambini", label: "Bambini", icon: "child_care" },
+      { id: "libri", label: "Libri", icon: "menu_book" },
+    ];
+    const PRODUCTS = [
+      { id:1, cat:"electronics", title:"Cuffie Wireless Noise Cancelling Premium", price:189, oldPrice:345, discount:45, asin:"B0CX23V2ZK", top10:true, top10rank:1, img:"https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
+      { id:2, cat:"home", title:"Macchina Espresso Artisan Edition Nera", price:299, oldPrice:420, discount:30, asin:"B07RBKDKR7", top10:true, top10rank:2, img:"https://m.media-amazon.com/images/I/71CnIqMbG3L._AC_SL1500_.jpg" },
+      { id:3, cat:"fashion", title:"Sneakers Minimalist Leather Premium", price:75, oldPrice:185, discount:60, asin:"B09W9FNJHM", top10:true, top10rank:3, img:"https://m.media-amazon.com/images/I/619kWBV4gDL._AC_SL1500_.jpg" },
+      { id:4, cat:"electronics", title:"Smartwatch Ultra Fitness Tracker GPS", price:129, oldPrice:249, discount:48, asin:"B0BDHZH9SG", img:"https://m.media-amazon.com/images/I/71ZtjfHenAL._AC_SL1500_.jpg" },
+      { id:5, cat:"sport", title:"Tappetino Yoga Premium Antiscivolo 6mm", price:34, oldPrice:59, discount:42, asin:"B08CXRHK5D", top10:true, top10rank:5, img:"https://m.media-amazon.com/images/I/71C8JQnUiQL._AC_SL1500_.jpg" },
+      { id:6, cat:"beauty", title:"Set Skincare Vitamina C Siero + Crema", price:22, oldPrice:45, discount:51, asin:"B09NQKQ2Y6", top10:true, top10rank:4, img:"https://m.media-amazon.com/images/I/71UJ-XGo4TL._AC_SL1500_.jpg" },
+      { id:7, cat:"auto", title:"Aspirapolvere Auto 12V Portatile 9000Pa", price:29, oldPrice:55, discount:47, asin:"B09G8VW1B8", img:"https://m.media-amazon.com/images/I/61hHWsS2lTL._AC_SL1500_.jpg" },
+      { id:8, cat:"giardino", title:"Robot Tagliaerba WiFi Automatico 600mq", price:449, oldPrice:699, discount:36, asin:"B09GCMZMHD", top10:true, top10rank:6, img:"https://m.media-amazon.com/images/I/71ztZiXmFHL._AC_SL1500_.jpg" },
+      { id:9, cat:"bambini", title:"Costruzioni Magnetiche 100 Pezzi STEM", price:28, oldPrice:50, discount:44, asin:"B081CHKGCQ", top10:true, top10rank:7, img:"https://m.media-amazon.com/images/I/71nJpFotRuL._AC_SL1500_.jpg" },
+      { id:10, cat:"electronics", title:"Kindle Paperwhite 16GB Ultima Generazione", price:149, oldPrice:189, discount:21, asin:"B09SWTGQMK", top10:true, top10rank:8, img:"https://m.media-amazon.com/images/I/61t3As3BGZL._AC_SL1500_.jpg" },
+      { id:11, cat:"home", title:"Robot Aspirapolvere e Lavapavimenti WiFi", price:189, oldPrice:329, discount:43, asin:"B09GLCBDV6", top10:true, top10rank:9, img:"https://m.media-amazon.com/images/I/61bZAj7RYAL._AC_SL1500_.jpg" },
+      { id:12, cat:"electronics", title:"Echo Dot 5ª Gen con Orologio — Altoparlante Alexa", price:39, oldPrice:69, discount:43, asin:"B09B8YWXDF", top10:true, top10rank:10, img:"https://m.media-amazon.com/images/I/71ONhhNHILL._AC_SL1500_.jpg" },
+    ];
+    function useCountdown() {
+      const getTarget = () => { const e = new Date(); e.setHours(23,59,59,999); return e; };
+      const [target] = useState(getTarget);
+      const [now, setNow] = useState(new Date());
+      useEffect(() => { const id = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(id); }, []);
+      const diff = Math.max(0, target - now);
+      return `${String(Math.floor(diff/3600000)).padStart(2,"0")}:${String(Math.floor((diff%3600000)/60000)).padStart(2,"0")}:${String(Math.floor((diff%60000)/1000)).padStart(2,"0")}`;
+    }
+    function Icon({ name, className="" }) {
+      return <span className={`material-symbols-outlined ${className}`} style={{lineHeight:1}}>{name}</span>;
+    }
+    function ProductCard({ product }) {
+      return (
+        <a href={makeAmazonLink(product.asin)} target="_blank" rel="noopener noreferrer nofollow"
+          className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl p-5 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+          <div className="relative w-full aspect-square mb-5 overflow-hidden rounded-xl bg-gray-50 dark:bg-slate-700">
+            <img src={product.img} alt={product.title} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy" onError={(e)=>{e.target.src="https://via.placeholder.com/300x300?text=Prodotto"}} />
+            <div className="absolute top-3 left-3 bg-[#00a7cb] text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">-{product.discount}%</div>
+          </div>
+          <div className="flex flex-col flex-grow">
+            <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-2">{product.cat}</p>
+            <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 leading-snug mb-4 flex-grow">{product.title}</h3>
+            <div className="flex items-baseline gap-3 mb-5">
+              <span className="text-2xl font-black text-[#ab3500] dark:text-[#ff6b35]">€{product.price},00</span>
+              <span className="text-sm text-gray-400 line-through font-medium">€{product.oldPrice},00</span>
+            </div>
+            <div className="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 group-hover:shadow-lg" style={{background:"linear-gradient(90deg,#ab3500,#ff6b35)"}}>
+              Vai all'Offerta <Icon name="arrow_forward" className="text-base" />
+            </div>
+          </div>
+        </a>
+      );
+    }
+    function Top10Card({ product, rank }) {
+      return (
+        <a href={makeAmazonLink(product.asin)} target="_blank" rel="noopener noreferrer nofollow"
+          className="group flex items-center gap-4 bg-white dark:bg-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
+          style={{textDecoration:"none",minWidth:"300px",flexShrink:0}}>
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 ${rank<=3?"text-white shadow-md":"bg-blue-100 dark:bg-slate-700 text-slate-700 dark:text-gray-300"}`}
+            style={rank<=3?{background:"linear-gradient(135deg,#ab3500,#ff6b35)"}:{}}>{rank}</div>
+          <div className="w-16 h-16 rounded-lg bg-gray-50 dark:bg-slate-700 overflow-hidden flex-shrink-0">
+            <img src={product.img} alt={product.title} className="w-full h-full object-contain p-1 group-hover:scale-110 transition-transform duration-300" loading="lazy" onError={(e)=>{e.target.src="https://via.placeholder.com/64x64?text=P"}} />
+          </div>
+          <div className="flex-grow min-w-0">
+            <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-0.5">{product.cat}</p>
+            <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight" style={{overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{product.title}</h4>
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className="text-lg font-black text-[#ab3500] dark:text-[#ff6b35]">€{product.price}</span>
+              <span className="text-xs text-gray-400 line-through">€{product.oldPrice}</span>
+              <span className="text-xs font-black text-[#00a7cb]">-{product.discount}%</span>
+            </div>
+          </div>
+          <Icon name="arrow_forward" className="text-gray-300 dark:text-gray-600 group-hover:text-[#ff6b35] transition-colors flex-shrink-0" />
+        </a>
+      );
+    }
+    function App() {
+      const [dark, setDark] = useState(false);
+      const [activeCat, setActiveCat] = useState("all");
+      const [search, setSearch] = useState("");
+      const [showSearch, setShowSearch] = useState(false);
+      const searchRef = useRef(null);
+      const countdown = useCountdown();
+      useEffect(() => { dark ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark"); }, [dark]);
+      useEffect(() => { if (showSearch && searchRef.current) searchRef.current.focus(); }, [showSearch]);
+      const top10 = PRODUCTS.filter(p=>p.top10).sort((a,b)=>(a.top10rank||99)-(b.top10rank||99)).slice(0,10);
+      const filtered = PRODUCTS.filter(p => (activeCat==="all"||p.cat===activeCat) && (!search||p.title.toLowerCase().includes(search.toLowerCase())));
+      return (
+        <div className="min-h-screen bg-[#faf8ff] dark:bg-[#0a1a3a] text-[#0a1a3a] dark:text-[#faf8ff] transition-colors duration-300">
+          <header className="fixed top-0 w-full z-50 bg-white/90 dark:bg-[#0a1a3a]/90 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700/40 shadow-sm">
+            <div className="flex items-center justify-between px-5 py-3.5 max-w-6xl mx-auto">
+              <button onClick={()=>setShowSearch(s=>!s)} className="text-[#ab3500] dark:text-[#ff6b35] hover:opacity-70 transition-opacity p-1">
+                <Icon name={showSearch?"close":"search"} className="text-2xl" />
+              </button>
+              <div className="font-black tracking-tighter text-xl uppercase select-none text-[#0a1a3a] dark:text-white">KINETIC<span style={{color:"#ff6b35"}}>.</span></div>
+              <button onClick={()=>setDark(d=>!d)} className="text-[#ab3500] dark:text-[#ff6b35] hover:opacity-70 transition-opacity p-1">
+                <Icon name={dark?"light_mode":"dark_mode"} className="text-2xl" />
+              </button>
+            </div>
+            {showSearch && (
+              <div className="px-5 pb-3 max-w-6xl mx-auto">
+                <input ref={searchRef} type="text" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Cerca offerte..."
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-sm outline-none text-gray-900 dark:text-white placeholder-gray-400" style={{border:"none"}} />
+              </div>
+            )}
+          </header>
+          <main className="pt-20 pb-28 md:pb-12">
+            <section className="px-5 py-10 md:py-16 max-w-6xl mx-auto">
+              <div className="bg-[#f1f3ff] dark:bg-slate-800/60 rounded-3xl p-8 md:p-14 relative overflow-hidden flex flex-col items-center text-center">
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase mb-6 leading-tight text-[#0a1a3a] dark:text-white">Le Migliori Offerte<br />del Giorno</h1>
+                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm tracking-widest uppercase shadow-lg font-medium" style={{background:"#0a1a3a",color:"white"}}>
+                  <Icon name="schedule" className="text-[#ff6b35] text-base" />
+                  Termina tra <span className="text-[#ff6b35] font-black" style={{fontFamily:"monospace"}}>{countdown}</span>
+                </div>
+              </div>
+            </section>
+            {top10.length > 0 && (
+              <section className="px-5 max-w-6xl mx-auto mb-12">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:"linear-gradient(135deg,#ab3500,#ff6b35)"}}>
+                    <Icon name="trophy" className="text-white text-lg" />
+                  </div>
+                  <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">Top 10 del Momento</h2>
+                </div>
+                <div className="flex gap-4 pb-4 no-scrollbar" style={{overflowX:"auto"}}>
+                  {top10.map((p,i) => <Top10Card key={p.id} product={p} rank={i+1} />)}
+                </div>
+              </section>
+            )}
+            <section className="hidden md:flex justify-center gap-3 px-5 mb-10 flex-wrap">
+              {CATEGORIES.map(c => (
+                <button key={c.id} onClick={()=>setActiveCat(c.id)}
+                  className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 ${activeCat===c.id?"text-white shadow-md":"bg-blue-100 dark:bg-slate-700 text-[#0a1a3a] dark:text-gray-300 hover:bg-blue-200 dark:hover:bg-slate-600"}`}
+                  style={activeCat===c.id?{background:"linear-gradient(90deg,#ab3500,#ff6b35)"}:{}}>{c.label}</button>
+              ))}
+            </section>
+            <section className="px-5 max-w-6xl mx-auto">
+              {filtered.length === 0 ? (
+                <div className="text-center py-20 text-gray-400"><Icon name="search_off" className="text-5xl mb-3 block" /><p className="text-sm">Nessuna offerta trovata</p></div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+                </div>
+              )}
+            </section>
+          </main>
+          <footer className="w-full py-8 bg-[#f1f3ff] dark:bg-[#1a2a4a]">
+            <div className="flex flex-col items-center text-center px-8 gap-3">
+              <div className="flex gap-6">
+                {["Privacy","Terms","Cookie Policy"].map(l => <a key={l} href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">{l}</a>)}
+              </div>
+              <p className="text-xs text-gray-400 dark:text-gray-500 max-w-md">© 2026 Kinetic Curator — Affiliate Disclosure: potremmo ricevere commissioni dagli acquisti tramite i nostri link Amazon.</p>
+            </div>
+          </footer>
+          <nav className="md:hidden fixed bottom-0 w-full z-50 bg-white/90 dark:bg-[#0a1a3a]/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-700/40">
+            <div className="flex justify-around items-center h-16 px-2">
+              {CATEGORIES.filter(c=>["electronics","home","fashion","sport","beauty"].includes(c.id)).map(c => {
+                const active = activeCat===c.id;
+                return (
+                  <button key={c.id} onClick={()=>setActiveCat(active?"all":c.id)}
+                    className={`flex flex-col items-center gap-0.5 transition-all duration-200 ${active?"text-[#ab3500] dark:text-[#ff6b35]":"text-gray-400 dark:text-gray-500"}`}>
+                    <Icon name={c.icon} className="text-2xl" />
+                    <span className="font-bold tracking-wider uppercase" style={{fontSize:"10px"}}>{c.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
