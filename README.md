@@ -1,0 +1,2 @@
+# kinetic-curator
+affiliate app
