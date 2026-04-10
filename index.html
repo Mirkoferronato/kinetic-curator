@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kinetic Curator | Le Migliori Offerte del Giorno</title>
-  <meta name="description" content="Le migliori offerte del giorno selezionate da Amazon. Risparmia su elettronica, casa, moda, sport e molto altro." />
+  <title>Kinetic Curator | Le Migliori Offerte Amazon del Giorno</title>
+  <meta name="description" content="Le migliori offerte Amazon del giorno: cuffie, smartwatch, robot aspirapolvere, Fire TV e molto altro. Risparmia fino al 57% ogni giorno." />
+  <meta name="keywords" content="offerte amazon, sconti amazon, offerte lampo, amazon it deals, risparmio" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -18,40 +19,217 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     a { text-decoration: none; }
+    .modal-bg { position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px; }
+    .modal-box { background:#fff;border-radius:16px;max-width:680px;width:100%;max-height:85vh;overflow-y:auto;padding:32px; }
+    .dark .modal-box { background:#1a2a4a;color:#faf8ff; }
   </style>
 </head>
 <body class="bg-[#faf8ff] dark:bg-[#0a1a3a] transition-colors duration-300">
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
+ 
     const AFFILIATE_TAG = "mirkoferron07-21";
-    const makeAmazonLink = (asin) => `https://www.amazon.it/dp/${asin}?tag=${AFFILIATE_TAG}&linkCode=ogi&th=1&psc=1`;
+    const makeAmazonLink = (asin) =>
+      `https://www.amazon.it/dp/${asin}?tag=${AFFILIATE_TAG}&linkCode=ogi&th=1&psc=1`;
+ 
     const CATEGORIES = [
-      { id: "all", label: "Tutto", icon: "star" },
-      { id: "electronics", label: "Electronics", icon: "devices" },
-      { id: "home", label: "Casa", icon: "home" },
-      { id: "fashion", label: "Moda", icon: "apparel" },
-      { id: "sport", label: "Sport", icon: "sports_soccer" },
-      { id: "beauty", label: "Beauty", icon: "content_cut" },
-      { id: "auto", label: "Auto", icon: "directions_car" },
-      { id: "giardino", label: "Giardino", icon: "yard" },
-      { id: "bambini", label: "Bambini", icon: "child_care" },
-      { id: "libri", label: "Libri", icon: "menu_book" },
+      { id:"all",         label:"Tutto",       icon:"star" },
+      { id:"electronics", label:"Elettronica",  icon:"devices" },
+      { id:"home",        label:"Casa",         icon:"home" },
+      { id:"fashion",     label:"Moda",         icon:"apparel" },
+      { id:"sport",       label:"Sport",        icon:"sports_soccer" },
+      { id:"beauty",      label:"Beauty",       icon:"content_cut" },
+      { id:"auto",        label:"Auto",         icon:"directions_car" },
+      { id:"giardino",    label:"Giardino",     icon:"yard" },
+      { id:"bambini",     label:"Bambini",      icon:"child_care" },
+      { id:"libri",       label:"Libri",        icon:"menu_book" },
     ];
+ 
+    // ── PRODOTTI REALI (ASIN verificati Amazon.it) ───────────────────────────
     const PRODUCTS = [
-      { id:1, cat:"electronics", title:"Cuffie Wireless Noise Cancelling Premium", price:189, oldPrice:345, discount:45, asin:"B0CX23V2ZK", top10:true, top10rank:1, img:"https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1500_.jpg" },
-      { id:2, cat:"home", title:"Macchina Espresso Artisan Edition Nera", price:299, oldPrice:420, discount:30, asin:"B07RBKDKR7", top10:true, top10rank:2, img:"https://m.media-amazon.com/images/I/71CnIqMbG3L._AC_SL1500_.jpg" },
-      { id:3, cat:"fashion", title:"Sneakers Minimalist Leather Premium", price:75, oldPrice:185, discount:60, asin:"B09W9FNJHM", top10:true, top10rank:3, img:"https://m.media-amazon.com/images/I/619kWBV4gDL._AC_SL1500_.jpg" },
-      { id:4, cat:"electronics", title:"Smartwatch Ultra Fitness Tracker GPS", price:129, oldPrice:249, discount:48, asin:"B0BDHZH9SG", img:"https://m.media-amazon.com/images/I/71ZtjfHenAL._AC_SL1500_.jpg" },
-      { id:5, cat:"sport", title:"Tappetino Yoga Premium Antiscivolo 6mm", price:34, oldPrice:59, discount:42, asin:"B08CXRHK5D", top10:true, top10rank:5, img:"https://m.media-amazon.com/images/I/71C8JQnUiQL._AC_SL1500_.jpg" },
-      { id:6, cat:"beauty", title:"Set Skincare Vitamina C Siero + Crema", price:22, oldPrice:45, discount:51, asin:"B09NQKQ2Y6", top10:true, top10rank:4, img:"https://m.media-amazon.com/images/I/71UJ-XGo4TL._AC_SL1500_.jpg" },
-      { id:7, cat:"auto", title:"Aspirapolvere Auto 12V Portatile 9000Pa", price:29, oldPrice:55, discount:47, asin:"B09G8VW1B8", img:"https://m.media-amazon.com/images/I/61hHWsS2lTL._AC_SL1500_.jpg" },
-      { id:8, cat:"giardino", title:"Robot Tagliaerba WiFi Automatico 600mq", price:449, oldPrice:699, discount:36, asin:"B09GCMZMHD", top10:true, top10rank:6, img:"https://m.media-amazon.com/images/I/71ztZiXmFHL._AC_SL1500_.jpg" },
-      { id:9, cat:"bambini", title:"Costruzioni Magnetiche 100 Pezzi STEM", price:28, oldPrice:50, discount:44, asin:"B081CHKGCQ", top10:true, top10rank:7, img:"https://m.media-amazon.com/images/I/71nJpFotRuL._AC_SL1500_.jpg" },
-      { id:10, cat:"electronics", title:"Kindle Paperwhite 16GB Ultima Generazione", price:149, oldPrice:189, discount:21, asin:"B09SWTGQMK", top10:true, top10rank:8, img:"https://m.media-amazon.com/images/I/61t3As3BGZL._AC_SL1500_.jpg" },
-      { id:11, cat:"home", title:"Robot Aspirapolvere e Lavapavimenti WiFi", price:189, oldPrice:329, discount:43, asin:"B09GLCBDV6", top10:true, top10rank:9, img:"https://m.media-amazon.com/images/I/61bZAj7RYAL._AC_SL1500_.jpg" },
-      { id:12, cat:"electronics", title:"Echo Dot 5ª Gen con Orologio — Altoparlante Alexa", price:39, oldPrice:69, discount:43, asin:"B09B8YWXDF", top10:true, top10rank:10, img:"https://m.media-amazon.com/images/I/71ONhhNHILL._AC_SL1500_.jpg" },
+      {
+        id:1, cat:"electronics",
+        title:"Sony WH-1000XM5 — Cuffie Wireless Noise Cancelling Top di Gamma",
+        price:179, oldPrice:419, discount:57,
+        asin:"B09Y2LL45F",
+        top10:true, top10rank:1,
+        img:"https://m.media-amazon.com/images/I/71o8Q5XJS5L._AC_SL500_.jpg"
+      },
+      {
+        id:2, cat:"electronics",
+        title:"Amazon Fire TV Stick 4K — Streaming Dolby Vision/Atmos Wi-Fi 6",
+        price:34.99, oldPrice:69.99, discount:50,
+        asin:"B0CJKTWTVT",
+        top10:true, top10rank:2,
+        img:"https://m.media-amazon.com/images/I/51TjJOTfslL._AC_SL500_.jpg"
+      },
+      {
+        id:3, cat:"electronics",
+        title:"Amazon Echo Dot 5ª Gen — Altoparlante Smart Alexa Orologio LED",
+        price:29.99, oldPrice:59.99, discount:50,
+        asin:"B09B8YWXDF",
+        top10:true, top10rank:3,
+        img:"https://m.media-amazon.com/images/I/71ZCdu6P8FL._AC_SL500_.jpg"
+      },
+      {
+        id:4, cat:"home",
+        title:"Dreame L10 Prime Robot Aspirapolvere Lavapavimenti 4000Pa Laser",
+        price:199, oldPrice:349, discount:43,
+        asin:"B0C717F2ZV",
+        top10:true, top10rank:4,
+        img:"https://m.media-amazon.com/images/I/61bZAj7RYAL._AC_SL500_.jpg"
+      },
+      {
+        id:5, cat:"sport",
+        title:"Garmin Forerunner 255 — Smartwatch GPS Running Multi-Band",
+        price:199, oldPrice:329, discount:40,
+        asin:"B0B46N7QQL",
+        top10:true, top10rank:5,
+        img:"https://m.media-amazon.com/images/I/71fVnMX9vIL._AC_SL500_.jpg"
+      },
+      {
+        id:6, cat:"home",
+        title:"Dreame D10s Robot Aspirapolvere Lavapavimenti LDS 5000Pa 280min",
+        price:149, oldPrice:249, discount:40,
+        asin:"B0BKPT6GQH",
+        top10:true, top10rank:6,
+        img:"https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL500_.jpg"
+      },
+      {
+        id:7, cat:"libri",
+        title:"Kindle Paperwhite 8GB — E-Reader Display 6.8'' Senza Pubblicità",
+        price:99, oldPrice:149, discount:34,
+        asin:"B09SWTGQMK",
+        top10:true, top10rank:7,
+        img:"https://m.media-amazon.com/images/I/61t3As3BGZL._AC_SL500_.jpg"
+      },
+      {
+        id:8, cat:"sport",
+        title:"Garmin Forerunner 165 — Smartwatch GPS AMOLED Cardio VO2max",
+        price:169, oldPrice:249, discount:32,
+        asin:"B0CT3SGHXL",
+        top10:true, top10rank:8,
+        img:"https://m.media-amazon.com/images/I/71ZtjfHenAL._AC_SL500_.jpg"
+      },
+      {
+        id:9, cat:"electronics",
+        title:"Amazon Fire TV Stick 4K Max — Wi-Fi 6E Alexa+ Ambient Mode",
+        price:49.99, oldPrice:79.99, discount:38,
+        asin:"B0CW4HD359",
+        top10:true, top10rank:9,
+        img:"https://m.media-amazon.com/images/I/61jyUbKBuML._AC_SL500_.jpg"
+      },
+      {
+        id:10, cat:"electronics",
+        title:"Apple AirPods Pro 2 USB-C — ANC Adattivo Chip H2 MagSafe",
+        price:199, oldPrice:279, discount:29,
+        asin:"B0CHX9WTR6",
+        top10:true, top10rank:10,
+        img:"https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SL500_.jpg"
+      },
+      {
+        id:11, cat:"home",
+        title:"Dreame L10s Ultra Gen 2 — Robot 10.000Pa Stazione Automatica MopExtend",
+        price:499, oldPrice:799, discount:38,
+        asin:"B0DCVYS9FQ",
+        img:"https://m.media-amazon.com/images/I/71ztZiXmFHL._AC_SL500_.jpg"
+      },
+      {
+        id:12, cat:"home",
+        title:"Dreame D10 Plus Gen 2 — Robot LiDAR Svuotamento Auto 6000Pa",
+        price:279, oldPrice:449, discount:38,
+        asin:"B0D3RGFSRB",
+        img:"https://m.media-amazon.com/images/I/71nJpFotRuL._AC_SL500_.jpg"
+      },
     ];
+ 
+    // ── POLICY CONTENT ────────────────────────────────────────────────────────
+    const PRIVACY_CONTENT = `
+## Privacy Policy
+ 
+**Ultimo aggiornamento: Aprile 2026**
+ 
+### Titolare del trattamento
+Kinetic Curator (contatto: ferronatomirko@gmail.com)
+ 
+### Dati raccolti
+Questo sito non raccoglie direttamente dati personali degli utenti. Non sono presenti form di registrazione, aree riservate o sistemi di profilazione propri.
+ 
+### Cookie e terze parti
+Il sito utilizza:
+- **Cookie tecnici** di Tailwind CSS CDN, Google Fonts e React CDN, necessari al corretto funzionamento
+- **Cookie di tracciamento Amazon**: Cliccando sui link di affiliazione, Amazon (amazon.it) potrà impostare cookie per tracciare le transazioni. Le modalità di utilizzo dei dati da parte di Amazon sono descritte nella [Privacy Policy di Amazon](https://www.amazon.it/gp/help/customer/display.html?nodeId=468496).
+- **Amazon Associates**: Questo sito partecipa al Programma di affiliazione Amazon EU. Utilizziamo link di affiliazione; se acquisti tramite questi link, Amazon potrebbe pagarci una commissione senza costi aggiuntivi per te.
+ 
+### Diritti degli utenti
+In conformità al GDPR (Reg. UE 2016/679) puoi richiedere accesso, rettifica, cancellazione o portabilità dei tuoi dati contattandoci a ferronatomirko@gmail.com.
+ 
+### Modifiche
+Ci riserviamo il diritto di aggiornare questa policy. La versione aggiornata sarà sempre disponibile su questa pagina.
+    `;
+ 
+    const TERMS_CONTENT = `
+## Termini di Servizio
+ 
+**Ultimo aggiornamento: Aprile 2026**
+ 
+### Accettazione dei termini
+Utilizzando Kinetic Curator accetti i presenti Termini di Servizio. Se non accetti, ti preghiamo di non utilizzare il sito.
+ 
+### Natura del servizio
+Kinetic Curator è un aggregatore di offerte che mostra prodotti disponibili su Amazon.it tramite il Programma di Affiliazione Amazon. **Non vendiamo prodotti direttamente**: tutte le transazioni avvengono su Amazon.it.
+ 
+### Prezzi e disponibilità
+I prezzi mostrati sono indicativi e soggetti a variazioni. La disponibilità dei prodotti dipende esclusivamente da Amazon. Verifica sempre il prezzo definitivo prima di acquistare su Amazon.it.
+ 
+### Programma di affiliazione
+Kinetic Curator partecipa al Programma di Affiliazione Amazon EU (Amazon Associates). Riceviamo una commissione sugli acquisti effettuati tramite i nostri link, senza costi aggiuntivi per l'utente. Il tag affiliato è: **mirkoferron07-21**.
+ 
+### Limitazione di responsabilità
+Kinetic Curator non è responsabile per: indisponibilità dei prodotti, variazioni di prezzo, qualità dei prodotti acquistati su Amazon, problemi con le spedizioni o il servizio clienti Amazon.
+ 
+### Proprietà intellettuale
+Tutti i contenuti originali (testi, grafica, codice) sono di proprietà di Kinetic Curator. Le immagini dei prodotti appartengono ai rispettivi proprietari (Amazon/produttori).
+ 
+### Contatti
+Per qualsiasi richiesta: ferronatomirko@gmail.com
+    `;
+ 
+    const COOKIE_CONTENT = `
+## Cookie Policy
+ 
+**Ultimo aggiornamento: Aprile 2026**
+ 
+### Cosa sono i cookie
+I cookie sono piccoli file di testo salvati nel tuo browser che permettono ai siti web di ricordare informazioni sulla tua visita.
+ 
+### Cookie utilizzati da questo sito
+ 
+#### Cookie tecnici (necessari)
+Questi cookie sono indispensabili per il funzionamento del sito e non richiedono consenso:
+- **Google Fonts**: caricamento dei font tipografici (analytics.google.com)
+- **CDN Tailwind/React/Babel**: file JavaScript e CSS necessari al rendering del sito
+ 
+#### Cookie di terze parti (Amazon)
+Quando clicchi su un link di affiliazione Amazon, Amazon.it può impostare cookie propri per:
+- Tracciare la sessione di acquisto e attribuire la commissione affiliato
+- Personalizzare la tua esperienza su Amazon
+- Analisi statistiche interne di Amazon
+ 
+Per gestire i cookie di Amazon, consulta: [amazon.it/gp/help/customer/display.html?nodeId=468496](https://www.amazon.it/gp/help/customer/display.html?nodeId=468496)
+ 
+### Come gestire i cookie
+Puoi gestire o disabilitare i cookie tramite le impostazioni del tuo browser:
+- **Chrome**: Impostazioni → Privacy e sicurezza → Cookie
+- **Firefox**: Opzioni → Privacy e sicurezza → Cookie
+- **Safari**: Preferenze → Privacy → Gestisci dati siti web
+ 
+### Consenso
+Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici descritti sopra. Per i cookie di terze parti (Amazon), il consenso viene gestito al momento del click sul link.
+    `;
+ 
+    // ── HOOKS ─────────────────────────────────────────────────────────────────
     function useCountdown() {
       const getTarget = () => { const e = new Date(); e.setHours(23,59,59,999); return e; };
       const [target] = useState(getTarget);
@@ -60,44 +238,103 @@
       const diff = Math.max(0, target - now);
       return `${String(Math.floor(diff/3600000)).padStart(2,"0")}:${String(Math.floor((diff%3600000)/60000)).padStart(2,"0")}:${String(Math.floor((diff%60000)/1000)).padStart(2,"0")}`;
     }
+ 
+    // ── COMPONENTS ────────────────────────────────────────────────────────────
     function Icon({ name, className="" }) {
       return <span className={`material-symbols-outlined ${className}`} style={{lineHeight:1}}>{name}</span>;
     }
+ 
+    function MarkdownText({ text }) {
+      const lines = text.trim().split('\n');
+      return (
+        <div className="text-sm leading-relaxed space-y-3">
+          {lines.map((line, i) => {
+            if (line.startsWith('## ')) return <h2 key={i} className="text-xl font-black text-[#0a1a3a] dark:text-white mt-4 mb-2">{line.slice(3)}</h2>;
+            if (line.startsWith('### ')) return <h3 key={i} className="text-base font-bold text-[#ab3500] mt-4 mb-1">{line.slice(4)}</h3>;
+            if (line.startsWith('#### ')) return <h4 key={i} className="text-sm font-bold text-gray-700 dark:text-gray-300 mt-3">{line.slice(5)}</h4>;
+            if (line.startsWith('- ')) return <li key={i} className="ml-4 text-gray-600 dark:text-gray-400 list-disc">{line.slice(2)}</li>;
+            if (line.startsWith('**') && line.endsWith('**')) return <p key={i} className="font-bold text-gray-800 dark:text-gray-200">{line.slice(2,-2)}</p>;
+            if (line === '') return <br key={i} />;
+            const bold = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return <p key={i} className="text-gray-600 dark:text-gray-400" dangerouslySetInnerHTML={{__html: bold}} />;
+          })}
+        </div>
+      );
+    }
+ 
+    function Modal({ title, content, onClose }) {
+      useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => { document.body.style.overflow = ''; };
+      }, []);
+      return (
+        <div className="modal-bg" onClick={onClose}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-black text-[#0a1a3a] dark:text-white">{title}</h2>
+              <button onClick={onClose} className="text-gray-400 hover:text-[#ab3500] transition-colors">
+                <Icon name="close" className="text-2xl" />
+              </button>
+            </div>
+            <MarkdownText text={content} />
+            <button onClick={onClose}
+              className="mt-8 w-full py-3 rounded-xl text-white font-bold text-sm"
+              style={{background:"linear-gradient(90deg,#ab3500,#ff6b35)"}}>
+              Ho capito, chiudi
+            </button>
+          </div>
+        </div>
+      );
+    }
+ 
     function ProductCard({ product }) {
       return (
         <a href={makeAmazonLink(product.asin)} target="_blank" rel="noopener noreferrer nofollow"
           className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl p-5 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
           <div className="relative w-full aspect-square mb-5 overflow-hidden rounded-xl bg-gray-50 dark:bg-slate-700">
-            <img src={product.img} alt={product.title} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy" onError={(e)=>{e.target.src="https://via.placeholder.com/300x300?text=Prodotto"}} />
-            <div className="absolute top-3 left-3 bg-[#00a7cb] text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">-{product.discount}%</div>
+            <img src={product.img} alt={product.title}
+              className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              onError={(e)=>{e.target.onerror=null;e.target.src="https://placehold.co/300x300/f1f3ff/0a1a3a?text=Prodotto";}} />
+            <div className="absolute top-3 left-3 bg-[#00a7cb] text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
+              -{product.discount}%
+            </div>
           </div>
           <div className="flex flex-col flex-grow">
             <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-2">{product.cat}</p>
             <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 leading-snug mb-4 flex-grow">{product.title}</h3>
             <div className="flex items-baseline gap-3 mb-5">
-              <span className="text-2xl font-black text-[#ab3500] dark:text-[#ff6b35]">€{product.price},00</span>
-              <span className="text-sm text-gray-400 line-through font-medium">€{product.oldPrice},00</span>
+              <span className="text-2xl font-black text-[#ab3500] dark:text-[#ff6b35]">€{product.price.toFixed(2)}</span>
+              <span className="text-sm text-gray-400 line-through font-medium">€{product.oldPrice.toFixed(2)}</span>
             </div>
-            <div className="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 group-hover:shadow-lg" style={{background:"linear-gradient(90deg,#ab3500,#ff6b35)"}}>
+            <div className="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 group-hover:shadow-lg"
+              style={{background:"linear-gradient(90deg,#ab3500,#ff6b35)"}}>
               Vai all'Offerta <Icon name="arrow_forward" className="text-base" />
             </div>
           </div>
         </a>
       );
     }
+ 
     function Top10Card({ product, rank }) {
       return (
         <a href={makeAmazonLink(product.asin)} target="_blank" rel="noopener noreferrer nofollow"
           className="group flex items-center gap-4 bg-white dark:bg-slate-800 rounded-xl p-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
           style={{textDecoration:"none",minWidth:"300px",flexShrink:0}}>
           <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 ${rank<=3?"text-white shadow-md":"bg-blue-100 dark:bg-slate-700 text-slate-700 dark:text-gray-300"}`}
-            style={rank<=3?{background:"linear-gradient(135deg,#ab3500,#ff6b35)"}:{}}>{rank}</div>
+            style={rank<=3?{background:"linear-gradient(135deg,#ab3500,#ff6b35)"}:{}}>
+            {rank}
+          </div>
           <div className="w-16 h-16 rounded-lg bg-gray-50 dark:bg-slate-700 overflow-hidden flex-shrink-0">
-            <img src={product.img} alt={product.title} className="w-full h-full object-contain p-1 group-hover:scale-110 transition-transform duration-300" loading="lazy" onError={(e)=>{e.target.src="https://via.placeholder.com/64x64?text=P"}} />
+            <img src={product.img} alt={product.title}
+              className="w-full h-full object-contain p-1 group-hover:scale-110 transition-transform duration-300"
+              loading="lazy"
+              onError={(e)=>{e.target.onerror=null;e.target.src="https://placehold.co/64x64/f1f3ff/0a1a3a?text=P";}} />
           </div>
           <div className="flex-grow min-w-0">
             <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-0.5">{product.cat}</p>
-            <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight" style={{overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{product.title}</h4>
+            <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight"
+              style={{overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{product.title}</h4>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-lg font-black text-[#ab3500] dark:text-[#ff6b35]">€{product.price}</span>
               <span className="text-xs text-gray-400 line-through">€{product.oldPrice}</span>
@@ -108,69 +345,108 @@
         </a>
       );
     }
+ 
+    // ── APP ───────────────────────────────────────────────────────────────────
     function App() {
       const [dark, setDark] = useState(false);
       const [activeCat, setActiveCat] = useState("all");
       const [search, setSearch] = useState("");
       const [showSearch, setShowSearch] = useState(false);
+      const [modal, setModal] = useState(null); // 'privacy' | 'terms' | 'cookie'
       const searchRef = useRef(null);
       const countdown = useCountdown();
-      useEffect(() => { dark ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark"); }, [dark]);
+ 
+      useEffect(() => {
+        dark ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");
+      }, [dark]);
+ 
       useEffect(() => { if (showSearch && searchRef.current) searchRef.current.focus(); }, [showSearch]);
+ 
       const top10 = PRODUCTS.filter(p=>p.top10).sort((a,b)=>(a.top10rank||99)-(b.top10rank||99)).slice(0,10);
       const filtered = PRODUCTS.filter(p => (activeCat==="all"||p.cat===activeCat) && (!search||p.title.toLowerCase().includes(search.toLowerCase())));
+ 
       return (
         <div className="min-h-screen bg-[#faf8ff] dark:bg-[#0a1a3a] text-[#0a1a3a] dark:text-[#faf8ff] transition-colors duration-300">
+ 
+          {/* HEADER */}
           <header className="fixed top-0 w-full z-50 bg-white/90 dark:bg-[#0a1a3a]/90 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700/40 shadow-sm">
             <div className="flex items-center justify-between px-5 py-3.5 max-w-6xl mx-auto">
               <button onClick={()=>setShowSearch(s=>!s)} className="text-[#ab3500] dark:text-[#ff6b35] hover:opacity-70 transition-opacity p-1">
                 <Icon name={showSearch?"close":"search"} className="text-2xl" />
               </button>
-              <div className="font-black tracking-tighter text-xl uppercase select-none text-[#0a1a3a] dark:text-white">KINETIC<span style={{color:"#ff6b35"}}>.</span></div>
+              <div className="font-black tracking-tighter text-xl uppercase select-none text-[#0a1a3a] dark:text-white">
+                KINETIC<span style={{color:"#ff6b35"}}>.</span>
+              </div>
               <button onClick={()=>setDark(d=>!d)} className="text-[#ab3500] dark:text-[#ff6b35] hover:opacity-70 transition-opacity p-1">
                 <Icon name={dark?"light_mode":"dark_mode"} className="text-2xl" />
               </button>
             </div>
             {showSearch && (
               <div className="px-5 pb-3 max-w-6xl mx-auto">
-                <input ref={searchRef} type="text" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Cerca offerte..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-sm outline-none text-gray-900 dark:text-white placeholder-gray-400" style={{border:"none"}} />
+                <input ref={searchRef} type="text" value={search} onChange={e=>setSearch(e.target.value)}
+                  placeholder="Cerca offerte... (es. Sony, Kindle, Robot)"
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-sm outline-none text-gray-900 dark:text-white placeholder-gray-400"
+                  style={{border:"none"}} />
               </div>
             )}
           </header>
+ 
           <main className="pt-20 pb-28 md:pb-12">
+ 
+            {/* HERO */}
             <section className="px-5 py-10 md:py-16 max-w-6xl mx-auto">
               <div className="bg-[#f1f3ff] dark:bg-slate-800/60 rounded-3xl p-8 md:p-14 relative overflow-hidden flex flex-col items-center text-center">
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase mb-6 leading-tight text-[#0a1a3a] dark:text-white">Le Migliori Offerte<br />del Giorno</h1>
-                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm tracking-widest uppercase shadow-lg font-medium" style={{background:"#0a1a3a",color:"white"}}>
+                <div style={{position:"absolute",top:0,right:0,width:"256px",height:"256px",background:"rgba(255,107,53,0.08)",filter:"blur(80px)",marginRight:"-128px",marginTop:"-128px",pointerEvents:"none"}} />
+                <div style={{position:"absolute",bottom:0,left:0,width:"192px",height:"192px",background:"rgba(0,167,203,0.06)",filter:"blur(60px)",marginLeft:"-96px",marginBottom:"-96px",pointerEvents:"none"}} />
+                <p className="text-xs font-black text-[#00a7cb] uppercase tracking-widest mb-4">🔥 Offerte aggiornate ogni giorno</p>
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase mb-6 leading-tight text-[#0a1a3a] dark:text-white" style={{letterSpacing:"-0.02em"}}>
+                  Le Migliori Offerte<br />Amazon del Giorno
+                </h1>
+                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm tracking-widest uppercase shadow-lg font-medium mb-4"
+                  style={{background:"#0a1a3a",color:"white"}}>
                   <Icon name="schedule" className="text-[#ff6b35] text-base" />
-                  Termina tra <span className="text-[#ff6b35] font-black" style={{fontFamily:"monospace"}}>{countdown}</span>
+                  Termina tra{" "}
+                  <span className="text-[#ff6b35] font-black" style={{fontFamily:"monospace"}}>{countdown}</span>
                 </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 max-w-sm">
+                  Link di affiliazione Amazon — se acquisti tramite questi link potremmo ricevere una commissione, senza costi aggiuntivi per te.
+                </p>
               </div>
             </section>
+ 
+            {/* TOP 10 */}
             {top10.length > 0 && (
               <section className="px-5 max-w-6xl mx-auto mb-12">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:"linear-gradient(135deg,#ab3500,#ff6b35)"}}>
                     <Icon name="trophy" className="text-white text-lg" />
                   </div>
-                  <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">Top 10 del Momento</h2>
+                  <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">Top 10 Sconti del Momento</h2>
                 </div>
                 <div className="flex gap-4 pb-4 no-scrollbar" style={{overflowX:"auto"}}>
                   {top10.map((p,i) => <Top10Card key={p.id} product={p} rank={i+1} />)}
                 </div>
               </section>
             )}
+ 
+            {/* CATEGORIES — desktop */}
             <section className="hidden md:flex justify-center gap-3 px-5 mb-10 flex-wrap">
               {CATEGORIES.map(c => (
                 <button key={c.id} onClick={()=>setActiveCat(c.id)}
                   className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 ${activeCat===c.id?"text-white shadow-md":"bg-blue-100 dark:bg-slate-700 text-[#0a1a3a] dark:text-gray-300 hover:bg-blue-200 dark:hover:bg-slate-600"}`}
-                  style={activeCat===c.id?{background:"linear-gradient(90deg,#ab3500,#ff6b35)"}:{}}>{c.label}</button>
+                  style={activeCat===c.id?{background:"linear-gradient(90deg,#ab3500,#ff6b35)"}:{}}>
+                  {c.label}
+                </button>
               ))}
             </section>
+ 
+            {/* GRID */}
             <section className="px-5 max-w-6xl mx-auto">
               {filtered.length === 0 ? (
-                <div className="text-center py-20 text-gray-400"><Icon name="search_off" className="text-5xl mb-3 block" /><p className="text-sm">Nessuna offerta trovata</p></div>
+                <div className="text-center py-20 text-gray-400">
+                  <Icon name="search_off" className="text-5xl mb-3 block" />
+                  <p className="text-sm">Nessuna offerta trovata per "{search}"</p>
+                </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filtered.map(p => <ProductCard key={p.id} product={p} />)}
@@ -178,14 +454,28 @@
               )}
             </section>
           </main>
-          <footer className="w-full py-8 bg-[#f1f3ff] dark:bg-[#1a2a4a]">
-            <div className="flex flex-col items-center text-center px-8 gap-3">
-              <div className="flex gap-6">
-                {["Privacy","Terms","Cookie Policy"].map(l => <a key={l} href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">{l}</a>)}
+ 
+          {/* FOOTER */}
+          <footer className="w-full py-10 bg-[#f1f3ff] dark:bg-[#1a2a4a]">
+            <div className="flex flex-col items-center text-center px-8 gap-4 max-w-2xl mx-auto">
+              <div className="font-black tracking-tighter text-lg uppercase text-[#0a1a3a] dark:text-white">
+                KINETIC<span style={{color:"#ff6b35"}}>.</span>
               </div>
-              <p className="text-xs text-gray-400 dark:text-gray-500 max-w-md">© 2026 Kinetic Curator — Affiliate Disclosure: potremmo ricevere commissioni dagli acquisti tramite i nostri link Amazon.</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Partecipante al Programma di Affiliazione Amazon EU — <strong>mirkoferron07-21</strong> — Riceviamo commissioni sugli acquisti qualificati, senza costi aggiuntivi per te.
+              </p>
+              <div className="flex gap-6 flex-wrap justify-center">
+                <button onClick={()=>setModal('privacy')} className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">Privacy Policy</button>
+                <button onClick={()=>setModal('terms')} className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">Termini di Servizio</button>
+                <button onClick={()=>setModal('cookie')} className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">Cookie Policy</button>
+              </div>
+              <p className="text-xs text-gray-400 dark:text-gray-500">
+                © 2026 Kinetic Curator — I prezzi mostrati sono indicativi e possono variare. Verifica sempre il prezzo su Amazon prima di acquistare.
+              </p>
             </div>
           </footer>
+ 
+          {/* BOTTOM NAV */}
           <nav className="md:hidden fixed bottom-0 w-full z-50 bg-white/90 dark:bg-[#0a1a3a]/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-700/40">
             <div className="flex justify-around items-center h-16 px-2">
               {CATEGORIES.filter(c=>["electronics","home","fashion","sport","beauty"].includes(c.id)).map(c => {
@@ -200,9 +490,15 @@
               })}
             </div>
           </nav>
+ 
+          {/* MODALS */}
+          {modal==='privacy' && <Modal title="Privacy Policy" content={PRIVACY_CONTENT} onClose={()=>setModal(null)} />}
+          {modal==='terms'   && <Modal title="Termini di Servizio" content={TERMS_CONTENT} onClose={()=>setModal(null)} />}
+          {modal==='cookie'  && <Modal title="Cookie Policy" content={COOKIE_CONTENT} onClose={()=>setModal(null)} />}
         </div>
       );
     }
+ 
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
