@@ -4,26 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kinetic Curator | Le Migliori Offerte Amazon del Giorno</title>
-  <meta name="description" content="Selezione aggiornata ogni giorno delle migliori offerte Amazon: elettronica, casa, cucina, bellezza, sport e molto altro. Prezzi uguali ad Amazon — risparmi davvero, senza fregature." />
+  <meta name="description" content="Selezione aggiornata ogni giorno delle migliori offerte Amazon: elettronica, casa, sport e molto altro. Prezzi uguali ad Amazon — risparmi davvero, senza fregature." />
   <meta name="keywords" content="offerte amazon, sconti amazon, offerte lampo, amazon it deals, risparmio, migliori prezzi amazon, coupon amazon, offerte elettronica, robot aspirapolvere offerta" />
   <link rel="canonical" href="https://kinetic-curator.vercel.app/" />
-
-  <!-- Open Graph / Facebook -->
+ 
+  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kinetic-curator.vercel.app/" />
   <meta property="og:title" content="Kinetic Curator — Offerte Amazon Selezionate Ogni Giorno" />
-  <meta property="og:description" content="Selezione curata ogni giorno. Risparmia fino al 57% su elettronica, casa, bellezza e sport. Prezzi uguali ad Amazon, nessun costo extra." />
+  <meta property="og:description" content="Selezione curata ogni giorno. Risparmia su elettronica, casa, sport. Prezzi uguali ad Amazon, nessun costo extra." />
   <meta property="og:image" content="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1200&q=80&fit=crop" />
   <meta property="og:locale" content="it_IT" />
   <meta property="og:site_name" content="Kinetic Curator" />
-
+ 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Kinetic Curator — Offerte Amazon del Giorno" />
   <meta name="twitter:description" content="Selezione curata ogni giorno. Prezzi uguali ad Amazon, nessun costo aggiuntivo." />
   <meta name="twitter:image" content="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1200&q=80&fit=crop" />
-
-  <!-- JSON-LD Structured Data -->
+ 
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -36,20 +36,10 @@
       "@type": "SearchAction",
       "target": "https://kinetic-curator.vercel.app/?q={search_term_string}",
       "query-input": "required name=search_term_string"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Kinetic Curator",
-      "url": "https://kinetic-curator.vercel.app",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer support",
-        "email": "ripplnnetworkitalia@gmail.com"
-      }
     }
   }
   </script>
-
+ 
   <script src="https://cdn.tailwindcss.com"></script>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -74,426 +64,206 @@
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect, useRef, useMemo } = React;
-
+ 
     const AFFILIATE_TAG = "kineticapp-21";
     const makeAmazonLink = (asin) =>
       `https://www.amazon.it/dp/${asin}?tag=${AFFILIATE_TAG}&linkCode=ogi&th=1&psc=1`;
     const asinImg = (asin) =>
       `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`;
-
-    // Formatta data in italiano
+ 
     const TODAY = new Date().toLocaleDateString("it-IT", { day:"numeric", month:"long", year:"numeric" });
-
+ 
     const CATEGORIES = [
       { id:"all",         label:"Tutto",      icon:"star" },
       { id:"electronics", label:"Elettronica", icon:"devices" },
       { id:"home",        label:"Casa",        icon:"home" },
-      { id:"cucina",      label:"Cucina",      icon:"restaurant" },
-      { id:"beauty",      label:"Beauty",      icon:"content_cut" },
-      { id:"cura",        label:"Cura Pers.",  icon:"spa" },
       { id:"sport",       label:"Sport",       icon:"sports_soccer" },
-      { id:"fashion",     label:"Moda",        icon:"apparel" },
-      { id:"auto",        label:"Auto",        icon:"directions_car" },
-      { id:"bambini",     label:"Bambini",     icon:"child_care" },
-      { id:"libri",       label:"Libri",       icon:"menu_book" },
+      { id:"bambini",     label:"Regali",      icon:"redeem" },
     ];
-
-    // ── PRODOTTI REALI (ASIN verificati Amazon.it) ─────────────────────────────
+ 
+    // ── PRODOTTI — verificati su Amazon.it il 11 apr 2026 ──────────────────────
+    // Prezzi rilevati direttamente dalla pagina Amazon; possono variare.
+    // Clicca sempre per vedere il prezzo aggiornato in tempo reale.
     const PRODUCTS = [
-
-      /* ── TOP 10 ───────────────────────────────────────────────────────────── */
+ 
+      /* ── TOP 10 (per sconto %) ── */
       {
         id:1, cat:"electronics",
-        title:"Sony WH-1000XM5 — Cuffie Wireless Noise Cancelling Top di Gamma",
-        price:179, oldPrice:419, discount:57,
-        asin:"B09Y2LL45F", top10:true, top10rank:1,
-        img:"https://m.media-amazon.com/images/I/71o8Q5XJS5L._AC_SL500_.jpg"
+        title:"Samsung Galaxy Buds3 FE — Auricolari ANC True Wireless, Audio 360",
+        price:79.49, oldPrice:149.00, discount:47,
+        asin:"B0FJY2C7LR", top10:true, top10rank:1,
+        img:asinImg("B0FJY2C7LR")
       },
       {
         id:2, cat:"electronics",
-        title:"Amazon Fire TV Stick 4K — Streaming Dolby Vision/Atmos Wi-Fi 6",
-        price:34.99, oldPrice:69.99, discount:50,
-        asin:"B0CJKTWTVT", top10:true, top10rank:2,
-        img:"https://m.media-amazon.com/images/I/51TjJOTfslL._AC_SL500_.jpg"
+        title:"Amazon Fire TV Stick HD (Ultimo modello) — Streaming Full HD con Alexa",
+        price:26.99, oldPrice:44.99, discount:40,
+        asin:"B0CQMWQDH4", top10:true, top10rank:2,
+        img:asinImg("B0CQMWQDH4")
       },
       {
         id:3, cat:"electronics",
-        title:"Amazon Echo Dot 5ª Gen con Orologio — Smart Speaker Alexa",
-        price:29.99, oldPrice:59.99, discount:50,
-        asin:"B09B8YWXDF", top10:true, top10rank:3,
-        img:asinImg("B09B8YWXDF")
+        title:"Sony WF-1000XM5 — Auricolari In-Ear Wireless Noise Cancelling Hi-Res",
+        price:199.00, oldPrice:319.00, discount:38,
+        asin:"B0C4TJXPNJ", top10:true, top10rank:3,
+        img:asinImg("B0C4TJXPNJ")
       },
       {
-        id:4, cat:"home",
-        title:"Dreame L10 Prime Robot Aspirapolvere Lavapavimenti 4000Pa Laser",
-        price:199, oldPrice:349, discount:43,
-        asin:"B0C717F2ZV", top10:true, top10rank:4,
-        img:asinImg("B0C717F2ZV")
+        id:4, cat:"bambini",
+        title:"LEGO Botanicals Bouquet di Fiori con 15 Specie Diverse — Set Adulti",
+        price:37.20, oldPrice:59.99, discount:38,
+        asin:"B08G4KJGG3", top10:true, top10rank:4,
+        img:asinImg("B08G4KJGG3")
       },
       {
-        id:5, cat:"sport",
-        title:"Garmin Forerunner 255 — Smartwatch GPS Running Multi-Band VO2max",
-        price:199, oldPrice:329, discount:40,
-        asin:"B0B46N7QQL", top10:true, top10rank:5,
-        img:asinImg("B0B46N7QQL")
+        id:5, cat:"home",
+        title:"Dreame L10s Ultra Gen 2 — Robot Aspirapolvere 10.000Pa MopExtend RoboSwing",
+        price:349.00, oldPrice:499.00, discount:30,
+        asin:"B0DCVYS9FQ", top10:true, top10rank:5,
+        img:asinImg("B0DCVYS9FQ")
       },
       {
-        id:6, cat:"home",
-        title:"Dreame D10s Robot Aspirapolvere Lavapavimenti LDS 5000Pa 280min",
-        price:149, oldPrice:249, discount:40,
-        asin:"B0BKPT6GQH", top10:true, top10rank:6,
-        img:asinImg("B0BKPT6GQH")
+        id:6, cat:"electronics",
+        title:"Samsung Galaxy Buds3 Pro — ANC Adattivo Hi-Fi Bluetooth True Wireless",
+        price:176.89, oldPrice:249.00, discount:29,
+        asin:"B0D473K14L", top10:true, top10rank:6,
+        img:asinImg("B0D473K14L")
       },
       {
-        id:7, cat:"libri",
-        title:"Kindle Paperwhite 8GB — E-Reader Display 6.8'' Senza Pubblicità",
-        price:99, oldPrice:149, discount:34,
-        asin:"B09SWTGQMK", top10:true, top10rank:7,
-        img:asinImg("B09SWTGQMK")
+        id:7, cat:"home",
+        title:"Dreame L40 Ultra AE — Robot 19.000Pa Auto-pulizia Mocio Riscaldato",
+        price:499.00, oldPrice:699.00, discount:29,
+        asin:"B0F53MJY8T", top10:true, top10rank:7,
+        img:asinImg("B0F53MJY8T")
       },
       {
         id:8, cat:"sport",
-        title:"Garmin Forerunner 165 — Smartwatch GPS AMOLED Cardio VO2max",
-        price:169, oldPrice:249, discount:32,
+        title:"Garmin Forerunner 165 — Smartwatch GPS AMOLED Cardio VO2max Running",
+        price:199.49, oldPrice:279.99, discount:29,
         asin:"B0CT3SGHXL", top10:true, top10rank:8,
         img:asinImg("B0CT3SGHXL")
       },
       {
         id:9, cat:"electronics",
-        title:"Amazon Fire TV Stick 4K Max — Wi-Fi 6E Alexa+ Ambient Mode",
-        price:49.99, oldPrice:79.99, discount:38,
-        asin:"B0CW4HD359", top10:true, top10rank:9,
-        img:asinImg("B0CW4HD359")
+        title:"Anker Nano Power Bank 10000mAh — USB-C Integrato PD 30W Ultra Compatto",
+        price:35.99, oldPrice:49.99, discount:28,
+        asin:"B0C9CJKCH3", top10:true, top10rank:9,
+        img:asinImg("B0C9CJKCH3")
       },
       {
         id:10, cat:"electronics",
-        title:"Apple AirPods Pro 2 USB-C — ANC Adattivo Chip H2 MagSafe",
-        price:199, oldPrice:279, discount:29,
-        asin:"B0CHX9WTR6", top10:true, top10rank:10,
-        img:"https://m.media-amazon.com/images/I/61SUj2aKoEL._AC_SL500_.jpg"
+        title:"Soundcore Space One Pro by Anker — Cuffie ANC Adattivo Over-Ear 40h",
+        price:149.99, oldPrice:199.99, discount:25,
+        asin:"B0CZ8G716J", top10:true, top10rank:10,
+        img:asinImg("B0CZ8G716J")
       },
-
-      /* ── CASA ─────────────────────────────────────────────────────────────── */
+ 
+      /* ── ALTRI PRODOTTI ── */
       {
-        id:11, cat:"home",
-        title:"Dreame L10s Ultra Gen 2 — Robot 10.000Pa Stazione Svuotamento Automatico",
-        price:499, oldPrice:799, discount:38,
-        asin:"B0DCVYS9FQ",
-        img:asinImg("B0DCVYS9FQ")
-      },
-      {
-        id:12, cat:"home",
-        title:"Dreame D10 Plus Gen 2 — Robot LiDAR Svuotamento Auto 6000Pa",
-        price:279, oldPrice:449, discount:38,
-        asin:"B0D3RGFSRB",
-        img:asinImg("B0D3RGFSRB")
+        id:11, cat:"electronics",
+        title:"Apple AirPods Pro 3 — ANC Chip H2, Rilevamento Frequenza Cardiaca",
+        price:219.00, oldPrice:249.00, discount:12,
+        asin:"B0FQF32239",
+        img:asinImg("B0FQF32239")
       },
       {
-        id:13, cat:"home",
-        title:"Philips Hue Go Lampada Portatile Smart — 16 Milioni di Colori",
-        price:39.99, oldPrice:79.99, discount:50,
-        asin:"B07KPFGYJZ",
-        img:asinImg("B07KPFGYJZ")
+        id:12, cat:"electronics",
+        title:"Apple AirPods 4 — Auricolari Wireless Audio Spaziale Personalizzato",
+        price:129.00, oldPrice:149.00, discount:13,
+        asin:"B0DGHWD7CT",
+        img:asinImg("B0DGHWD7CT")
+      },
+      {
+        id:13, cat:"electronics",
+        title:"Anker Power Bank 20000mAh con Cavo USB-C Integrato — Ricarica Rapida",
+        price:39.99, oldPrice:49.99, discount:20,
+        asin:"B0CXDXP8VR",
+        img:asinImg("B0CXDXP8VR")
       },
       {
         id:14, cat:"home",
-        title:"Rowenta Silence Steam Pro Ferro da Stiro — 240g/min Colpo di Vapore",
-        price:49.99, oldPrice:89.99, discount:44,
-        asin:"B08PGM1V2Q",
-        img:asinImg("B08PGM1V2Q")
-      },
-
-      /* ── CUCINA ───────────────────────────────────────────────────────────── */
-      {
-        id:15, cat:"cucina",
-        title:"Instant Vortex Plus Air Fryer 5.7L — Friggitrice ad Aria 7 Programmi",
-        price:79.99, oldPrice:149.99, discount:47,
-        asin:"B08VMV1X7S",
-        img:asinImg("B08VMV1X7S")
+        title:"Dreame D20 Pro Plus — Robot 13.000Pa Doppia Spazzola Lavapavimenti",
+        price:249.00, oldPrice:299.00, discount:17,
+        asin:"B0FBGXW79K",
+        img:asinImg("B0FBGXW79K")
       },
       {
-        id:16, cat:"cucina",
-        title:"Nespresso Vertuo Pop — Macchina Caffè Centrifusion 5 Taglie Tazza",
-        price:69.99, oldPrice:129.99, discount:46,
-        asin:"B0B1M9J6CB",
-        img:asinImg("B0B1M9J6CB")
+        id:15, cat:"bambini",
+        title:"LEGO Botanicals Albero Bonsai — Pianta Artificiale da Interno 878 Pezzi",
+        price:39.90, oldPrice:49.99, discount:20,
+        asin:"B08G4PCG8F",
+        img:asinImg("B08G4PCG8F")
       },
       {
-        id:17, cat:"cucina",
-        title:"Tefal Ingenio Expertise Set 3 Padelle Antiaderenti Manico Rimovibile",
-        price:34.99, oldPrice:64.99, discount:46,
-        asin:"B00B7OVZ9U",
-        img:asinImg("B00B7OVZ9U")
-      },
-      {
-        id:18, cat:"cucina",
-        title:"Philips HD2516 Tostapane con Cassettino Briciole — 8 Impostazioni",
-        price:24.99, oldPrice:44.99, discount:44,
-        asin:"B083V6CLZF",
-        img:asinImg("B083V6CLZF")
-      },
-      {
-        id:19, cat:"cucina",
-        title:"Lavazza Crema e Gusto Cialde — 100 Capsule Compatibili Nespresso",
-        price:19.99, oldPrice:34.99, discount:43,
-        asin:"B09TNQQDMJ",
-        img:asinImg("B09TNQQDMJ")
-      },
-      {
-        id:20, cat:"cucina",
-        title:"Moulinex Juice Mixer Frullatore a Immersione — 600W 3 Velocità",
-        price:19.99, oldPrice:39.99, discount:50,
-        asin:"B08KGXCVTM",
-        img:asinImg("B08KGXCVTM")
-      },
-
-      /* ── BEAUTY ───────────────────────────────────────────────────────────── */
-      {
-        id:21, cat:"beauty",
-        title:"Oral-B iO Series 3 Spazzolino Elettrico Ricaricabile — 2 Testine",
-        price:39.99, oldPrice:79.99, discount:50,
-        asin:"B08MHLL1GT",
-        img:asinImg("B08MHLL1GT")
-      },
-      {
-        id:22, cat:"beauty",
-        title:"Philips Series 8000 Epilatore Wet & Dry — Luce LED 5 Accessori",
-        price:49.99, oldPrice:99.99, discount:50,
-        asin:"B09CNXB5DP",
-        img:asinImg("B09CNXB5DP")
-      },
-      {
-        id:23, cat:"beauty",
-        title:"Remington MB4045 Regolabarba Kit Corpo & Capelli — 11 Accessori",
-        price:24.99, oldPrice:49.99, discount:50,
-        asin:"B075R7M1WL",
-        img:asinImg("B075R7M1WL")
-      },
-
-      /* ── CURA PERSONALE ───────────────────────────────────────────────────── */
-      {
-        id:24, cat:"cura",
-        title:"Braun Series 5 Rasoio Elettrico Wet&Dry — EasyClean AutoSense",
-        price:49.99, oldPrice:99.99, discount:50,
-        asin:"B08GKF6CR8",
-        img:asinImg("B08GKF6CR8")
-      },
-      {
-        id:25, cat:"cura",
-        title:"Gillette Fusion5 ProGlide — 12 Testine di Ricambio Lama di Precisione",
-        price:19.99, oldPrice:39.99, discount:50,
-        asin:"B07G2HWDCZ",
-        img:asinImg("B07G2HWDCZ")
-      },
-      {
-        id:26, cat:"cura",
-        title:"Pantene Pro-V Miracle Shampoo Nutriente — Confezione 3×400ml",
-        price:12.99, oldPrice:22.99, discount:43,
-        asin:"B08J65R1HB",
-        img:asinImg("B08J65R1HB")
-      },
-      {
-        id:27, cat:"cura",
-        title:"Duracell Optimum AA Pile Alcaline — Confezione 12 Batterie Lungo Dura",
-        price:9.99, oldPrice:17.99, discount:44,
-        asin:"B093M1BLTJ",
-        img:asinImg("B093M1BLTJ")
-      },
-
-      /* ── ELETTRONICA ──────────────────────────────────────────────────────── */
-      {
-        id:28, cat:"electronics",
-        title:"Logitech MX Master 3S Mouse Wireless Silenzioso — 8000 DPI Ergonomico",
-        price:69.99, oldPrice:109.99, discount:36,
-        asin:"B09HM94VDS",
-        img:asinImg("B09HM94VDS")
-      },
-      {
-        id:29, cat:"electronics",
-        title:"Samsung Galaxy Buds2 Pro — Cuffie ANC True Wireless Hi-Fi 360 Audio",
-        price:99.99, oldPrice:229.99, discount:57,
-        asin:"B0B2S19FLJ",
-        img:asinImg("B0B2S19FLJ")
-      },
-      {
-        id:30, cat:"electronics",
-        title:"Anker PowerCore 10000 Power Bank — Ricarica Rapida Compatta",
-        price:19.99, oldPrice:35.99, discount:44,
-        asin:"B07BNSCNFD",
-        img:asinImg("B07BNSCNFD")
-      },
-      {
-        id:31, cat:"electronics",
-        title:"Logitech C920s HD Pro Webcam — 1080p Privacy Shutter Microfoni Stereo",
-        price:49.99, oldPrice:89.99, discount:44,
-        asin:"B07K986YLL",
-        img:asinImg("B07K986YLL")
-      },
-      {
-        id:32, cat:"electronics",
-        title:"TP-Link Deco M4 Sistema Wi-Fi Mesh Tri-Pack — Copertura 420m²",
-        price:59.99, oldPrice:89.99, discount:33,
-        asin:"B07MBLWWD7",
-        img:asinImg("B07MBLWWD7")
-      },
-
-      /* ── SPORT ────────────────────────────────────────────────────────────── */
-      {
-        id:33, cat:"sport",
-        title:"Set 5 Fasce Elastiche Resistenza — Fitness Yoga Pilates Crossfit",
-        price:14.99, oldPrice:29.99, discount:50,
-        asin:"B07B8J48H4",
-        img:asinImg("B07B8J48H4")
-      },
-      {
-        id:34, cat:"sport",
-        title:"Tappetino Yoga Antiscivolo 6mm — Fitness Pilates Studio TPE Ecologico",
-        price:19.99, oldPrice:39.99, discount:50,
-        asin:"B07DJZLZFB",
-        img:asinImg("B07DJZLZFB")
-      },
-      {
-        id:35, cat:"sport",
-        title:"Hydro Flask Standard Mouth Borraccia Termica — 621ml Acciaio Inox",
-        price:29.99, oldPrice:49.99, discount:40,
-        asin:"B09BBLMT42",
-        img:asinImg("B09BBLMT42")
-      },
-
-      /* ── MODA ─────────────────────────────────────────────────────────────── */
-      {
-        id:36, cat:"fashion",
-        title:"Under Armour Tech 2.0 T-Shirt Uomo — HeatGear Anti-odore Asciugatura Rapida",
-        price:14.99, oldPrice:29.99, discount:50,
-        asin:"B07H1ZM1J2",
-        img:asinImg("B07H1ZM1J2")
-      },
-      {
-        id:37, cat:"fashion",
-        title:"Levi's 501 Original Jeans Uomo — Taglio Dritto Classico Denim",
-        price:49.99, oldPrice:89.99, discount:44,
-        asin:"B07N5XWTDB",
-        img:asinImg("B07N5XWTDB")
-      },
-
-      /* ── AUTO ─────────────────────────────────────────────────────────────── */
-      {
-        id:38, cat:"auto",
-        title:"Nextbase 322GW Dashcam Full HD — GPS Wi-Fi Night Vision HDR",
-        price:69.99, oldPrice:129.99, discount:46,
-        asin:"B07QKPRGLS",
-        img:asinImg("B07QKPRGLS")
-      },
-      {
-        id:39, cat:"auto",
-        title:"Baseus Caricabatterie Auto USB-C 65W — 2 Porte Ricarica Ultra Rapida",
-        price:14.99, oldPrice:27.99, discount:46,
-        asin:"B0C4CHWJXH",
-        img:asinImg("B0C4CHWJXH")
-      },
-
-      /* ── BAMBINI ──────────────────────────────────────────────────────────── */
-      {
-        id:40, cat:"bambini",
-        title:"LEGO Classic Scatola Grande Mattoncini Creativi — 790 Pezzi",
-        price:44.99, oldPrice:79.99, discount:44,
-        asin:"B075H53RQZ",
-        img:asinImg("B075H53RQZ")
-      },
-      {
-        id:41, cat:"bambini",
-        title:"Hasbro Monopoly Classico — Gioco da Tavolo per Tutta la Famiglia",
-        price:19.99, oldPrice:34.99, discount:43,
-        asin:"B01N0CGCXL",
-        img:asinImg("B01N0CGCXL")
+        id:16, cat:"bambini",
+        title:"LEGO Classic 10698 Scatola Mattoncini Grande — Costruzioni Creative",
+        price:43.99, oldPrice:49.99, discount:12,
+        asin:"B00PY3EYQO",
+        img:asinImg("B00PY3EYQO")
       },
     ];
-
-    // ── POLICY CONTENT ──────────────────────────────────────────────────────────
+ 
+    // ── POLICY ─────────────────────────────────────────────────────────────────
     const PRIVACY_CONTENT = `
 ## Privacy Policy
-
+ 
 **Ultimo aggiornamento: Aprile 2026**
-
+ 
 ### Titolare del trattamento
 Kinetic Curator (contatto: ripplnnetworkitalia@gmail.com)
-
+ 
 ### Dati raccolti
 Questo sito non raccoglie direttamente dati personali degli utenti. Non sono presenti form di registrazione, aree riservate o sistemi di profilazione propri.
-
+ 
 ### Cookie e terze parti
 Il sito utilizza:
 - **Cookie tecnici** di Tailwind CSS CDN, Google Fonts e React CDN, necessari al corretto funzionamento
-- **Cookie di tracciamento Amazon**: Cliccando sui link di affiliazione, Amazon (amazon.it) potrà impostare cookie per tracciare le transazioni. Le modalità di utilizzo dei dati da parte di Amazon sono descritte nella [Privacy Policy di Amazon](https://www.amazon.it/gp/help/customer/display.html?nodeId=468496).
+- **Cookie di tracciamento Amazon**: Cliccando sui link di affiliazione, Amazon (amazon.it) potrà impostare cookie per tracciare le transazioni.
 - **Amazon Associates**: Questo sito partecipa al Programma di affiliazione Amazon EU. Utilizziamo link di affiliazione; se acquisti tramite questi link, Amazon potrebbe pagarci una commissione senza costi aggiuntivi per te.
-
+ 
 ### Diritti degli utenti
 In conformità al GDPR (Reg. UE 2016/679) puoi richiedere accesso, rettifica, cancellazione o portabilità dei tuoi dati contattandoci a ripplnnetworkitalia@gmail.com.
-
-### Modifiche
-Ci riserviamo il diritto di aggiornare questa policy. La versione aggiornata sarà sempre disponibile su questa pagina.
     `;
-
+ 
     const TERMS_CONTENT = `
 ## Termini di Servizio
-
+ 
 **Ultimo aggiornamento: Aprile 2026**
-
-### Accettazione dei termini
-Utilizzando Kinetic Curator accetti i presenti Termini di Servizio. Se non accetti, ti preghiamo di non utilizzare il sito.
-
+ 
 ### Natura del servizio
 Kinetic Curator è un aggregatore di offerte che mostra prodotti disponibili su Amazon.it tramite il Programma di Affiliazione Amazon. **Non vendiamo prodotti direttamente**: tutte le transazioni avvengono su Amazon.it.
-
+ 
 ### Prezzi e disponibilità
-I prezzi mostrati sono indicativi e soggetti a variazioni. La disponibilità dei prodotti dipende esclusivamente da Amazon. Verifica sempre il prezzo definitivo prima di acquistare su Amazon.it.
-
+I prezzi mostrati sono **indicativi** e soggetti a variazioni senza preavviso. La disponibilità dei prodotti dipende esclusivamente da Amazon. Verifica sempre il prezzo definitivo su Amazon.it prima di acquistare.
+ 
 ### Programma di affiliazione
 Kinetic Curator partecipa al Programma di Affiliazione Amazon EU (Amazon Associates). Riceviamo una commissione sugli acquisti effettuati tramite i nostri link, senza costi aggiuntivi per l'utente. Il tag affiliato è: **kineticapp-21**.
-
+ 
 ### Limitazione di responsabilità
-Kinetic Curator non è responsabile per: indisponibilità dei prodotti, variazioni di prezzo, qualità dei prodotti acquistati su Amazon, problemi con le spedizioni o il servizio clienti Amazon.
-
-### Proprietà intellettuale
-Tutti i contenuti originali (testi, grafica, codice) sono di proprietà di Kinetic Curator. Le immagini dei prodotti appartengono ai rispettivi proprietari (Amazon/produttori).
-
+Kinetic Curator non è responsabile per: variazioni di prezzo, indisponibilità dei prodotti, qualità dei prodotti acquistati su Amazon, problemi con spedizioni o servizio clienti Amazon.
+ 
 ### Contatti
-Per qualsiasi richiesta: ripplnnetworkitalia@gmail.com
+ripplnnetworkitalia@gmail.com
     `;
-
+ 
     const COOKIE_CONTENT = `
 ## Cookie Policy
-
+ 
 **Ultimo aggiornamento: Aprile 2026**
-
-### Cosa sono i cookie
-I cookie sono piccoli file di testo salvati nel tuo browser che permettono ai siti web di ricordare informazioni sulla tua visita.
-
-### Cookie utilizzati da questo sito
-
-#### Cookie tecnici (necessari)
-Questi cookie sono indispensabili per il funzionamento del sito e non richiedono consenso:
-- **Google Fonts**: caricamento dei font tipografici
-- **CDN Tailwind/React/Babel**: file JavaScript e CSS necessari al rendering del sito
-
-#### Cookie di terze parti (Amazon)
-Quando clicchi su un link di affiliazione Amazon, Amazon.it può impostare cookie propri per:
-- Tracciare la sessione di acquisto e attribuire la commissione affiliato
-- Personalizzare la tua esperienza su Amazon
-- Analisi statistiche interne di Amazon
-
-Per gestire i cookie di Amazon, consulta: [amazon.it/gp/help/customer/display.html?nodeId=468496](https://www.amazon.it/gp/help/customer/display.html?nodeId=468496)
-
+ 
+### Cookie tecnici (necessari)
+- **Google Fonts**: caricamento dei font
+- **CDN Tailwind/React/Babel**: file necessari al rendering del sito
+ 
+### Cookie di terze parti (Amazon)
+Quando clicchi su un link di affiliazione Amazon, Amazon.it può impostare cookie per tracciare la sessione di acquisto. Per gestirli: [amazon.it/gp/help/customer/display.html?nodeId=468496](https://www.amazon.it/gp/help/customer/display.html?nodeId=468496)
+ 
 ### Come gestire i cookie
-Puoi gestire o disabilitare i cookie tramite le impostazioni del tuo browser:
 - **Chrome**: Impostazioni → Privacy e sicurezza → Cookie
-- **Firefox**: Opzioni → Privacy e sicurezza → Cookie
-- **Safari**: Preferenze → Privacy → Gestisci dati siti web
-
-### Consenso
-Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici descritti sopra.
+- **Firefox**: Opzioni → Privacy e sicurezza
+- **Safari**: Preferenze → Privacy
     `;
-
+ 
     // ── HOOKS ───────────────────────────────────────────────────────────────────
     function useCountdown() {
       const getTarget = () => { const e = new Date(); e.setHours(23,59,59,999); return e; };
@@ -503,20 +273,18 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
       const diff = Math.max(0, target - now);
       return `${String(Math.floor(diff/3600000)).padStart(2,"0")}:${String(Math.floor((diff%3600000)/60000)).padStart(2,"0")}:${String(Math.floor((diff%60000)/1000)).padStart(2,"0")}`;
     }
-
+ 
     // ── COMPONENTS ──────────────────────────────────────────────────────────────
-    function Icon({ name, className="" }) {
-      return <span className={`material-symbols-outlined ${className}`} style={{lineHeight:1}}>{name}</span>;
+    function Icon({ name, className="", style={} }) {
+      return <span className={`material-symbols-outlined ${className}`} style={{lineHeight:1,...style}}>{name}</span>;
     }
-
+ 
     function MarkdownText({ text }) {
-      const lines = text.trim().split('\n');
       return (
         <div className="text-sm leading-relaxed space-y-3">
-          {lines.map((line, i) => {
+          {text.trim().split('\n').map((line, i) => {
             if (line.startsWith('## ')) return <h2 key={i} className="text-xl font-black text-[#0a1a3a] dark:text-white mt-4 mb-2">{line.slice(3)}</h2>;
             if (line.startsWith('### ')) return <h3 key={i} className="text-base font-bold text-[#ab3500] mt-4 mb-1">{line.slice(4)}</h3>;
-            if (line.startsWith('#### ')) return <h4 key={i} className="text-sm font-bold text-gray-700 dark:text-gray-300 mt-3">{line.slice(5)}</h4>;
             if (line.startsWith('- ')) return <li key={i} className="ml-4 text-gray-600 dark:text-gray-400 list-disc">{line.slice(2)}</li>;
             if (line === '') return <br key={i} />;
             const bold = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -525,7 +293,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
         </div>
       );
     }
-
+ 
     function Modal({ title, content, onClose }) {
       useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -550,7 +318,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
         </div>
       );
     }
-
+ 
     function ProductCard({ product }) {
       return (
         <a href={makeAmazonLink(product.asin)} target="_blank" rel="noopener noreferrer nofollow"
@@ -567,10 +335,11 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
           <div className="flex flex-col flex-grow">
             <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-2">{product.cat}</p>
             <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 leading-snug mb-4 flex-grow">{product.title}</h3>
-            <div className="flex items-baseline gap-3 mb-5">
-              <span className="text-2xl font-black text-[#ab3500] dark:text-[#ff6b35]">€{product.price.toFixed(2)}</span>
+            <div className="flex items-baseline gap-3 mb-1">
+              <span className="text-2xl font-black text-[#ab3500] dark:text-[#ff6b35]">~€{product.price.toFixed(2)}</span>
               <span className="text-sm text-gray-400 line-through font-medium">€{product.oldPrice.toFixed(2)}</span>
             </div>
+            <p className="text-xs text-gray-400 mb-4">Verifica prezzo aggiornato su Amazon →</p>
             <div className="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 group-hover:shadow-lg"
               style={{background:"linear-gradient(90deg,#ab3500,#ff6b35)"}}>
               Vai all'Offerta <Icon name="arrow_forward" className="text-base" />
@@ -579,7 +348,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
         </a>
       );
     }
-
+ 
     function Top10Card({ product, rank }) {
       return (
         <a href={makeAmazonLink(product.asin)} target="_blank" rel="noopener noreferrer nofollow"
@@ -596,11 +365,10 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
               onError={(e)=>{e.target.onerror=null;e.target.src="https://placehold.co/64x64/f1f3ff/0a1a3a?text=P";}} />
           </div>
           <div className="flex-grow min-w-0">
-            <p className="text-xs font-black text-gray-400 uppercase tracking-wider mb-0.5">{product.cat}</p>
             <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight"
               style={{overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{product.title}</h4>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-lg font-black text-[#ab3500] dark:text-[#ff6b35]">€{product.price}</span>
+              <span className="text-base font-black text-[#ab3500] dark:text-[#ff6b35]">~€{product.price}</span>
               <span className="text-xs text-gray-400 line-through">€{product.oldPrice}</span>
               <span className="text-xs font-black text-[#00a7cb]">-{product.discount}%</span>
             </div>
@@ -609,25 +377,22 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
         </a>
       );
     }
-
+ 
     // ── SEZIONE "COME FUNZIONA" ─────────────────────────────────────────────────
     function HowItWorks() {
       const steps = [
         { icon:"search", color:"#00a7cb", title:"Cerchiamo ogni giorno", desc:"Monitoriamo centinaia di prodotti su Amazon.it e segnaliamo solo quelli con uno sconto reale e significativo." },
-        { icon:"verified", color:"#ab3500", title:"Selezioniamo il meglio", desc:"Ogni offerta è controllata manualmente. Niente prodotti scadenti o sconti gonfiati: solo veri affari del momento." },
-        { icon:"savings", color:"#22c55e", title:"Tu risparmi davvero", desc:"Clicchi, vai su Amazon, compri. Il prezzo è identico — anzi, spesso è il più basso dell'anno. Zero fregature." },
+        { icon:"verified", color:"#ab3500", title:"Selezioniamo il meglio", desc:"Ogni offerta è controllata manualmente. Niente sconti gonfiati: solo veri affari del momento." },
+        { icon:"savings", color:"#22c55e", title:"Tu risparmi davvero", desc:"Clicchi, vai su Amazon, compri al prezzo che trovi. Il prezzo finale è sempre quello di Amazon." },
       ];
       return (
         <section className="px-5 max-w-6xl mx-auto mb-16">
-          {/* Intestazione sezione */}
           <div className="flex items-center gap-3 mb-8">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background:"linear-gradient(135deg,#00a7cb,#0a1a3a)"}}>
               <Icon name="info" className="text-white text-lg" />
             </div>
-            <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">Come Funziona Kinetic Curator</h2>
+            <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">Come Funziona</h2>
           </div>
-
-          {/* 3 step cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {steps.map((s,i) => (
               <div key={i} className="step-card bg-white dark:bg-slate-800 rounded-2xl p-6 hover:shadow-xl">
@@ -640,13 +405,12 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
               </div>
             ))}
           </div>
-
-          {/* "Chi siamo" con foto umana */}
-          <div className="bg-[#f1f3ff] dark:bg-slate-800/60 rounded-3xl overflow-hidden flex flex-col md:flex-row items-center gap-0">
-            <div className="w-full md:w-2/5 h-56 md:h-auto overflow-hidden flex-shrink-0">
+          {/* Chi siamo con foto */}
+          <div className="bg-[#f1f3ff] dark:bg-slate-800/60 rounded-3xl overflow-hidden flex flex-col md:flex-row items-center">
+            <div className="w-full md:w-2/5 h-56 md:h-64 overflow-hidden flex-shrink-0">
               <img
                 src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&fit=crop&crop=faces"
-                alt="Il nostro team seleziona le offerte ogni giorno"
+                alt="Selezione curata ogni giorno"
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -656,18 +420,18 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
               <h3 className="text-2xl md:text-3xl font-black text-[#0a1a3a] dark:text-white leading-tight mb-4">
                 Una selezione<br />umana, ogni giorno.
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-                Kinetic Curator non è un bot. Ogni mattina selezioniamo a mano le offerte più interessanti su Amazon.it, escludendo i prodotti con scarso rapporto qualità/prezzo o sconti fasulli. <strong>Solo roba che compreremmo noi stessi.</strong>
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-3">
+                Kinetic Curator non è un bot. Ogni mattina selezioniamo a mano le offerte più interessanti su Amazon.it, escludendo prodotti con scarso rapporto qualità/prezzo o sconti fasulli. <strong>Solo roba che compreremmo noi stessi.</strong>
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                Non ti chiediamo email, non ti mandiamo spam. Vieni quando vuoi, trovi sempre qualcosa di nuovo. Il sito è aggiornato ogni giorno — <strong>gratis, sempre.</strong>
+                I prezzi che mostriamo sono indicativi — possono variare di giorno in giorno. Il prezzo definitivo lo vedi sempre su Amazon, prima di acquistare.
               </p>
             </div>
           </div>
         </section>
       );
     }
-
+ 
     // ── APP ─────────────────────────────────────────────────────────────────────
     function App() {
       const [dark, setDark] = useState(false);
@@ -677,19 +441,19 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
       const [modal, setModal] = useState(null);
       const searchRef = useRef(null);
       const countdown = useCountdown();
-
+ 
       useEffect(() => {
         dark ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");
       }, [dark]);
-
+ 
       useEffect(() => { if (showSearch && searchRef.current) searchRef.current.focus(); }, [showSearch]);
-
+ 
       const top10 = useMemo(() => PRODUCTS.filter(p=>p.top10).sort((a,b)=>(a.top10rank||99)-(b.top10rank||99)).slice(0,10), []);
       const filtered = useMemo(() => PRODUCTS.filter(p => (activeCat==="all"||p.cat===activeCat) && (!search||p.title.toLowerCase().includes(search.toLowerCase()))), [activeCat, search]);
-
+ 
       return (
         <div className="min-h-screen bg-[#faf8ff] dark:bg-[#0a1a3a] text-[#0a1a3a] dark:text-[#faf8ff] transition-colors duration-300">
-
+ 
           {/* HEADER */}
           <header className="fixed top-0 w-full z-50 bg-white/90 dark:bg-[#0a1a3a]/90 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700/40 shadow-sm">
             <div className="flex items-center justify-between px-5 py-3.5 max-w-6xl mx-auto">
@@ -706,61 +470,72 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
             {showSearch && (
               <div className="px-5 pb-3 max-w-6xl mx-auto">
                 <input ref={searchRef} type="text" value={search} onChange={e=>setSearch(e.target.value)}
-                  placeholder="Cerca offerte... (es. Sony, Kindle, Robot, Yoga)"
+                  placeholder="Cerca offerte... (es. Sony, Kindle, Robot, Garmin)"
                   className="w-full px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 text-sm outline-none text-gray-900 dark:text-white placeholder-gray-400"
                   style={{border:"none"}} />
               </div>
             )}
           </header>
-
+ 
           <main className="pt-20 pb-28 md:pb-12">
-
+ 
             {/* HERO */}
             <section className="px-5 py-10 md:py-16 max-w-6xl mx-auto">
               <div className="bg-[#f1f3ff] dark:bg-slate-800/60 rounded-3xl p-8 md:p-14 relative overflow-hidden flex flex-col items-center text-center">
                 <div style={{position:"absolute",top:0,right:0,width:"256px",height:"256px",background:"rgba(255,107,53,0.08)",filter:"blur(80px)",marginRight:"-128px",marginTop:"-128px",pointerEvents:"none"}} />
                 <div style={{position:"absolute",bottom:0,left:0,width:"192px",height:"192px",background:"rgba(0,167,203,0.06)",filter:"blur(60px)",marginLeft:"-96px",marginBottom:"-96px",pointerEvents:"none"}} />
-
+ 
                 {/* Badge aggiornamento */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00a7cb]/10 border border-[#00a7cb]/30 mb-5">
                   <span className="w-2 h-2 rounded-full bg-[#00a7cb] animate-pulse" style={{display:"inline-block"}} />
                   <p className="text-xs font-black text-[#00a7cb] uppercase tracking-widest">Aggiornato oggi — {TODAY}</p>
                 </div>
-
+ 
                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight uppercase mb-6 leading-tight text-[#0a1a3a] dark:text-white" style={{letterSpacing:"-0.02em"}}>
                   Le Migliori Offerte<br />Amazon del Giorno
                 </h1>
-
-                {/* Stats rapide */}
+ 
+                {/* Stats */}
                 <div className="flex gap-6 mb-6 flex-wrap justify-center">
                   <div className="text-center">
                     <p className="text-2xl font-black text-[#ab3500]">{PRODUCTS.length}+</p>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider">Offerte attive</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider">Offerte selezionate</p>
                   </div>
                   <div className="w-px bg-gray-200 dark:bg-gray-700" />
                   <div className="text-center">
-                    <p className="text-2xl font-black text-[#ab3500]">57%</p>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider">Sconto max</p>
+                    <p className="text-2xl font-black text-[#ab3500]">47%</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider">Sconto massimo</p>
                   </div>
                   <div className="w-px bg-gray-200 dark:bg-gray-700" />
                   <div className="text-center">
-                    <p className="text-2xl font-black text-[#00a7cb]">0€</p>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider">Costo extra</p>
+                    <p className="text-2xl font-black text-[#00a7cb]">Ogni giorno</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider">Selezione aggiornata</p>
                   </div>
                 </div>
-
+ 
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm tracking-widest uppercase shadow-lg font-medium mb-4"
                   style={{background:"#0a1a3a",color:"white"}}>
                   <Icon name="schedule" className="text-[#ff6b35] text-base" />
                   Offerte valide ancora per{" "}
                   <span className="text-[#ff6b35] font-black" style={{fontFamily:"monospace"}}>{countdown}</span>
                 </div>
+ 
                 <p className="text-xs text-gray-500 dark:text-gray-400 max-w-sm">
-                  🎁 Clicchi sui link e compri <strong>direttamente su Amazon al prezzo ufficiale</strong> — per te non cambia nulla, anzi supporti il nostro lavoro di selezione gratuita.
+                  🎁 Clicchi e compri <strong>direttamente su Amazon al prezzo ufficiale</strong> — per te non cambia nulla, anzi supporti il nostro lavoro di selezione gratuita.
                 </p>
               </div>
             </section>
-
+ 
+            {/* BANNER DISCLAIMER PREZZI */}
+            <section className="px-5 max-w-6xl mx-auto mb-8">
+              <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-2xl px-5 py-4">
+                <Icon name="info" className="text-amber-500 text-xl flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-amber-700 dark:text-amber-300 leading-relaxed">
+                  <strong>I prezzi indicati (~€) sono orientativi</strong> e rilevati al momento della selezione — Amazon può aggiornarli in qualsiasi momento. Clicca sempre su "Vai all'Offerta" per vedere il <strong>prezzo aggiornato e la disponibilità reale</strong> direttamente su Amazon.it.
+                </p>
+              </div>
+            </section>
+ 
             {/* TOP 10 */}
             {top10.length > 0 && (
               <section className="px-5 max-w-6xl mx-auto mb-12">
@@ -775,10 +550,10 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
                 </div>
               </section>
             )}
-
-            {/* COME FUNZIONA + CHI SIAMO */}
+ 
+            {/* COME FUNZIONA */}
             <HowItWorks />
-
+ 
             {/* CATEGORIES — desktop */}
             <section className="hidden md:flex justify-center gap-3 px-5 mb-10 flex-wrap">
               {CATEGORIES.map(c => (
@@ -789,7 +564,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
                 </button>
               ))}
             </section>
-
+ 
             {/* GRID */}
             <section className="px-5 max-w-6xl mx-auto">
               <div className="flex items-center justify-between mb-6">
@@ -815,7 +590,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
               )}
             </section>
           </main>
-
+ 
           {/* FOOTER */}
           <footer className="w-full py-10 bg-[#f1f3ff] dark:bg-[#1a2a4a]">
             <div className="flex flex-col items-center text-center px-8 gap-4 max-w-2xl mx-auto">
@@ -823,7 +598,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
                 KINETIC<span style={{color:"#ff6b35"}}>.</span>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                ✅ I prezzi che vedi sono gli stessi di Amazon — <strong>non paghi nulla in più</strong>. Ogni acquisto tramite i nostri link ci permette di continuare a trovare le offerte migliori per te, gratis.
+                ✅ I prezzi che vedi sono quelli di Amazon — <strong>non paghi nulla in più</strong>. Ogni acquisto tramite i nostri link ci permette di continuare a trovare le offerte migliori per te, gratis.
               </p>
               <div className="flex gap-6 flex-wrap justify-center">
                 <button onClick={()=>setModal('privacy')} className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">Privacy Policy</button>
@@ -831,15 +606,15 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
                 <button onClick={()=>setModal('cookie')} className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">Cookie Policy</button>
               </div>
               <p className="text-xs text-gray-400 dark:text-gray-500">
-                © 2026 Kinetic Curator — Partecipante al Programma Affiliazione Amazon EU (kineticapp-21).<br />I prezzi possono variare: verifica sempre il prezzo finale su Amazon.
+                © 2026 Kinetic Curator — Partecipante al Programma Affiliazione Amazon EU (kineticapp-21).<br />I prezzi indicati sono orientativi: verifica sempre il prezzo finale su Amazon.it.
               </p>
             </div>
           </footer>
-
+ 
           {/* BOTTOM NAV — mobile */}
           <nav className="md:hidden fixed bottom-0 w-full z-50 bg-white/90 dark:bg-[#0a1a3a]/90 backdrop-blur-xl border-t border-gray-200 dark:border-gray-700/40">
             <div className="flex justify-around items-center h-16 px-2">
-              {CATEGORIES.filter(c=>["electronics","home","cucina","beauty","sport"].includes(c.id)).map(c => {
+              {CATEGORIES.filter(c=>["electronics","home","sport","bambini"].includes(c.id)).map(c => {
                 const active = activeCat===c.id;
                 return (
                   <button key={c.id} onClick={()=>setActiveCat(active?"all":c.id)}
@@ -851,7 +626,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
               })}
             </div>
           </nav>
-
+ 
           {/* MODALS */}
           {modal==='privacy' && <Modal title="Privacy Policy" content={PRIVACY_CONTENT} onClose={()=>setModal(null)} />}
           {modal==='terms'   && <Modal title="Termini di Servizio" content={TERMS_CONTENT} onClose={()=>setModal(null)} />}
@@ -859,7 +634,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
         </div>
       );
     }
-
+ 
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
