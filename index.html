@@ -29,9 +29,11 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
  
-    const AFFILIATE_TAG = "mirkoferron07-21";
+    const AFFILIATE_TAG = "kineticapp-21";
     const makeAmazonLink = (asin) =>
       `https://www.amazon.it/dp/${asin}?tag=${AFFILIATE_TAG}&linkCode=ogi&th=1&psc=1`;
+    // Fallback ASIN-based image URL (funziona senza hash)
+    const asinImg = (asin) => `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`;
  
     const CATEGORIES = [
       { id:"all",         label:"Tutto",       icon:"star" },
@@ -66,11 +68,11 @@
       },
       {
         id:3, cat:"electronics",
-        title:"Amazon Echo Dot 5ª Gen — Altoparlante Smart Alexa Orologio LED",
+        title:"Amazon Echo Dot 5ª Gen con Orologio — Smart Speaker Alexa",
         price:29.99, oldPrice:59.99, discount:50,
         asin:"B09B8YWXDF",
         top10:true, top10rank:3,
-        img:"https://m.media-amazon.com/images/I/71ZCdu6P8FL._AC_SL500_.jpg"
+        img:asinImg("B09B8YWXDF")
       },
       {
         id:4, cat:"home",
@@ -78,15 +80,15 @@
         price:199, oldPrice:349, discount:43,
         asin:"B0C717F2ZV",
         top10:true, top10rank:4,
-        img:"https://m.media-amazon.com/images/I/61bZAj7RYAL._AC_SL500_.jpg"
+        img:asinImg("B0C717F2ZV")
       },
       {
         id:5, cat:"sport",
-        title:"Garmin Forerunner 255 — Smartwatch GPS Running Multi-Band",
+        title:"Garmin Forerunner 255 — Smartwatch GPS Running Multi-Band VO2max",
         price:199, oldPrice:329, discount:40,
         asin:"B0B46N7QQL",
         top10:true, top10rank:5,
-        img:"https://m.media-amazon.com/images/I/71fVnMX9vIL._AC_SL500_.jpg"
+        img:asinImg("B0B46N7QQL")
       },
       {
         id:6, cat:"home",
@@ -94,7 +96,7 @@
         price:149, oldPrice:249, discount:40,
         asin:"B0BKPT6GQH",
         top10:true, top10rank:6,
-        img:"https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL500_.jpg"
+        img:asinImg("B0BKPT6GQH")
       },
       {
         id:7, cat:"libri",
@@ -102,7 +104,7 @@
         price:99, oldPrice:149, discount:34,
         asin:"B09SWTGQMK",
         top10:true, top10rank:7,
-        img:"https://m.media-amazon.com/images/I/61t3As3BGZL._AC_SL500_.jpg"
+        img:asinImg("B09SWTGQMK")
       },
       {
         id:8, cat:"sport",
@@ -110,7 +112,7 @@
         price:169, oldPrice:249, discount:32,
         asin:"B0CT3SGHXL",
         top10:true, top10rank:8,
-        img:"https://m.media-amazon.com/images/I/71ZtjfHenAL._AC_SL500_.jpg"
+        img:asinImg("B0CT3SGHXL")
       },
       {
         id:9, cat:"electronics",
@@ -118,7 +120,7 @@
         price:49.99, oldPrice:79.99, discount:38,
         asin:"B0CW4HD359",
         top10:true, top10rank:9,
-        img:"https://m.media-amazon.com/images/I/61jyUbKBuML._AC_SL500_.jpg"
+        img:asinImg("B0CW4HD359")
       },
       {
         id:10, cat:"electronics",
@@ -133,14 +135,14 @@
         title:"Dreame L10s Ultra Gen 2 — Robot 10.000Pa Stazione Automatica MopExtend",
         price:499, oldPrice:799, discount:38,
         asin:"B0DCVYS9FQ",
-        img:"https://m.media-amazon.com/images/I/71ztZiXmFHL._AC_SL500_.jpg"
+        img:asinImg("B0DCVYS9FQ")
       },
       {
         id:12, cat:"home",
         title:"Dreame D10 Plus Gen 2 — Robot LiDAR Svuotamento Auto 6000Pa",
         price:279, oldPrice:449, discount:38,
         asin:"B0D3RGFSRB",
-        img:"https://m.media-amazon.com/images/I/71nJpFotRuL._AC_SL500_.jpg"
+        img:asinImg("B0D3RGFSRB")
       },
     ];
  
@@ -151,7 +153,7 @@
 **Ultimo aggiornamento: Aprile 2026**
  
 ### Titolare del trattamento
-Kinetic Curator (contatto: ferronatomirko@gmail.com)
+Kinetic Curator (contatto: ripplnnetworkitalia@gmail.com)
  
 ### Dati raccolti
 Questo sito non raccoglie direttamente dati personali degli utenti. Non sono presenti form di registrazione, aree riservate o sistemi di profilazione propri.
@@ -163,7 +165,7 @@ Il sito utilizza:
 - **Amazon Associates**: Questo sito partecipa al Programma di affiliazione Amazon EU. Utilizziamo link di affiliazione; se acquisti tramite questi link, Amazon potrebbe pagarci una commissione senza costi aggiuntivi per te.
  
 ### Diritti degli utenti
-In conformità al GDPR (Reg. UE 2016/679) puoi richiedere accesso, rettifica, cancellazione o portabilità dei tuoi dati contattandoci a ferronatomirko@gmail.com.
+In conformità al GDPR (Reg. UE 2016/679) puoi richiedere accesso, rettifica, cancellazione o portabilità dei tuoi dati contattandoci a ripplnnetworkitalia@gmail.com.
  
 ### Modifiche
 Ci riserviamo il diritto di aggiornare questa policy. La versione aggiornata sarà sempre disponibile su questa pagina.
@@ -184,7 +186,7 @@ Kinetic Curator è un aggregatore di offerte che mostra prodotti disponibili su 
 I prezzi mostrati sono indicativi e soggetti a variazioni. La disponibilità dei prodotti dipende esclusivamente da Amazon. Verifica sempre il prezzo definitivo prima di acquistare su Amazon.it.
  
 ### Programma di affiliazione
-Kinetic Curator partecipa al Programma di Affiliazione Amazon EU (Amazon Associates). Riceviamo una commissione sugli acquisti effettuati tramite i nostri link, senza costi aggiuntivi per l'utente. Il tag affiliato è: **mirkoferron07-21**.
+Kinetic Curator partecipa al Programma di Affiliazione Amazon EU (Amazon Associates). Riceviamo una commissione sugli acquisti effettuati tramite i nostri link, senza costi aggiuntivi per l'utente. Il tag affiliato è: **kineticapp-21**.
  
 ### Limitazione di responsabilità
 Kinetic Curator non è responsabile per: indisponibilità dei prodotti, variazioni di prezzo, qualità dei prodotti acquistati su Amazon, problemi con le spedizioni o il servizio clienti Amazon.
@@ -193,7 +195,7 @@ Kinetic Curator non è responsabile per: indisponibilità dei prodotti, variazio
 Tutti i contenuti originali (testi, grafica, codice) sono di proprietà di Kinetic Curator. Le immagini dei prodotti appartengono ai rispettivi proprietari (Amazon/produttori).
  
 ### Contatti
-Per qualsiasi richiesta: ferronatomirko@gmail.com
+Per qualsiasi richiesta: ripplnnetworkitalia@gmail.com
     `;
  
     const COOKIE_CONTENT = `
@@ -409,7 +411,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
                   <span className="text-[#ff6b35] font-black" style={{fontFamily:"monospace"}}>{countdown}</span>
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 max-w-sm">
-                  Link di affiliazione Amazon — se acquisti tramite questi link potremmo ricevere una commissione, senza costi aggiuntivi per te.
+                  🎁 Clicca sui link e acquisti direttamente su Amazon al <strong>prezzo ufficiale</strong> — per te non cambia nulla, anzi supporti il nostro lavoro di selezione gratuita.
                 </p>
               </div>
             </section>
@@ -462,7 +464,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
                 KINETIC<span style={{color:"#ff6b35"}}>.</span>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Partecipante al Programma di Affiliazione Amazon EU — <strong>mirkoferron07-21</strong> — Riceviamo commissioni sugli acquisti qualificati, senza costi aggiuntivi per te.
+                ✅ I prezzi che vedi sono gli stessi di Amazon — <strong>non paghi nulla in più</strong>. Ogni acquisto tramite i nostri link ci permette di continuare a trovare le offerte migliori per te, gratis.
               </p>
               <div className="flex gap-6 flex-wrap justify-center">
                 <button onClick={()=>setModal('privacy')} className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">Privacy Policy</button>
@@ -470,7 +472,7 @@ Continuando a utilizzare questo sito, acconsenti all'uso dei cookie tecnici desc
                 <button onClick={()=>setModal('cookie')} className="text-xs text-gray-500 dark:text-gray-400 hover:text-[#ab3500] transition-colors">Cookie Policy</button>
               </div>
               <p className="text-xs text-gray-400 dark:text-gray-500">
-                © 2026 Kinetic Curator — I prezzi mostrati sono indicativi e possono variare. Verifica sempre il prezzo su Amazon prima di acquistare.
+                © 2026 Kinetic Curator — Partecipante al Programma Affiliazione Amazon EU (kineticapp-21). I prezzi possono variare: verifica il prezzo finale su Amazon.
               </p>
             </div>
           </footer>
